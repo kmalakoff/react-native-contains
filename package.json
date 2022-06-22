@@ -44,7 +44,7 @@
     "metro-react-native-babel-preset": "^0.71.1",
     "prettier": "^2.7.1",
     "react": "18.0.0",
-    "react-dom": "18.0.0",
+    "react-dom": "18.2.0",
     "react-native": "0.69.0-rc.6",
     "react-native-builder-bob": "^0.18.3",
     "react-test-renderer": "18.0.0",
