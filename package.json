@@ -1,6 +1,6 @@
 {
   "name": "react-native-contains",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Universal element contains for react, react-native, and react-native web",
   "keywords": [
     "react-native",
@@ -19,13 +19,13 @@
     "dist"
   ],
   "type": "module",
-  "main": "lib/commonjs/index.js",
-  "module": "lib/module/index.js",
-  "types": "lib/typescript/index.d.ts",
+  "main": "dist/commonjs/index.js",
+  "module": "dist/module/index.js",
+  "types": "dist/typescript/index.d.ts",
   "repository": "kmalakoff/react-native-contains",
   "scripts": {
     "build": "bob build",
-    "deploy": "npm run format && npm run lint && npm run build && npm run test:engines",
+    "deploy": "npm run format && npm run lint && npm run build && npm run test:engines && npm publish",
     "format": "tsds format",
     "lint": "tsds lint",
     "test": "jest",
