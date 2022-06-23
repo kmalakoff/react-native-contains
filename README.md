@@ -25,3 +25,7 @@ const Component() {
   )
 }
 ```
+
+### Documentation
+
+[API Docs](https://kmalakoff.github.io/react-native-contains/)
