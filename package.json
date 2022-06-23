@@ -32,7 +32,8 @@
   "repository": "kmalakoff/react-native-contains",
   "scripts": {
     "build": "tsds build",
-    "deploy": "npm run format && npm run lint && npm run build && npm run test:engines && npm publish",
+    "deploy": "npm run format && npm run lint && npm run build && npm run test:engines && npm run docs && np --no-yarn",
+    "docs": "gh-pages -d docs && git add docs",
     "format": "tsds format",
     "lint": "tsds lint",
     "test": "tsds link && NODE_OPTIONS=--experimental-vm-modules BABEL_ENV=test jest test/**/*.test.*",
