@@ -6,7 +6,7 @@ import assert from 'assert';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
-import contains from '../../src/index';
+import contains from 'react-native-contains';
 
 let root: Element | null;
 
