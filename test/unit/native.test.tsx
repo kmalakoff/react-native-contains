@@ -2,7 +2,7 @@ import assert from 'assert';
 import React from 'react';
 import { View } from 'react-native';
 import { create } from 'react-test-renderer';
-import contains from '../../src/index';
+import contains from 'react-native-contains';
 import toNativeElement from '../lib/toNativeElement';
 
 describe('native', function () {

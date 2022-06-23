@@ -24,4 +24,4 @@ export default function contains(element, target) {
 
   return containsTag(element, target._nativeTag);
 }
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.mjs.map
