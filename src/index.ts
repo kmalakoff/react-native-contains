@@ -3,15 +3,27 @@ export interface NativeElement {
   _children: NativeElement[];
 }
 
-function containsTag(node: NativeElement, tag: number) {
+function containsNative(node: NativeElement, target: NativeElement) {
   if (!node._nativeTag) {
-    return (node as unknown as number) === tag;
+    return (node as unknown as number) === target._nativeTag;
   }
-  if (node._nativeTag === tag) {
+  if (node._nativeTag === target._nativeTag) {
     return true;
   }
-  for (const child of node._children) {
-    if (containsTag(child, tag)) {
+  for (let i = 0; i < node._children.length; i++) {
+    if (containsNative(node._children[i], target)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function containsDOM(node: Element, target: HTMLElement) {
+  if (node == target) {
+    return true;
+  }
+  for (let i = 0; i < node.children.length; i++) {
+    if (containsDOM(node.children[i], target)) {
       return true;
     }
   }
@@ -22,12 +34,18 @@ export default function contains(
   element: HTMLElement | NativeElement,
   target: HTMLElement | NativeElement,
 ) {
-  // web
+  // dom built-in
   if ((element as HTMLElement).contains) {
     return (element as HTMLElement).contains(target as HTMLElement);
   }
-  return containsTag(
-    element as NativeElement,
-    (target as NativeElement)._nativeTag,
-  );
+
+  // native
+  else if ((target as NativeElement)._nativeTag) {
+    return containsNative(element as NativeElement, target as NativeElement);
+  }
+
+  // dom
+  else {
+    return containsDOM(element as Element, target as HTMLElement);
+  }
 }
