@@ -2,53 +2,97 @@
  * @jest-environment jsdom
  */
 
+import { describe, test } from '@jest/globals';
 import assert from 'assert';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
+import React, { useRef } from 'react';
+import { fireEvent, render } from '@testing-library/react-native';
+
+import { View } from 'react-native-web';
 import contains from 'react-native-contains';
+import getByTestIdFn from '../lib/getByTestIdFn';
 
-let root: Element | null;
-
-describe('native', function () {
-  beforeEach(function () {
-    root = document.createElement('div');
-    document.body.appendChild(root);
-  });
-
-  afterEach(function () {
-    document.body.removeChild(root!);
-    root = null;
-  });
-
+describe('react-native-web', function () {
   test('inside', function () {
-    act(function () {
-      ReactDOM.createRoot(root!).render(
-        <div>
-          <div id="container">
-            <div id="inside" />
-          </div>
-        </div>,
-      );
-    });
-
-    const container = document.getElementById('container');
-    const inside = document.getElementById('inside');
-    assert.ok(contains(container!, inside!));
+    const { container } = render(
+      <View>
+        <View testID="container">
+          <View testID="inside" />
+        </View>
+      </View>,
+    );
+    const getByTestId = getByTestIdFn(container);
+    assert.ok(
+      contains(
+        getByTestId('container') as unknown as HTMLElement,
+        getByTestId('inside') as unknown as HTMLElement,
+      ),
+    );
   });
 
   test('outside', function () {
-    act(function () {
-      ReactDOM.createRoot(root!).render(
-        <div>
-          <div id="container" />
-          <div id="outside" />
-        </div>,
-      );
-    });
+    const { container } = render(
+      <View>
+        <View testID="container" />
+        <View testID="outside" />
+      </View>,
+    );
+    const getByTestId = getByTestIdFn(container);
+    assert.ok(
+      !contains(
+        getByTestId('container') as unknown as HTMLElement,
+        getByTestId('outside') as unknown as HTMLElement,
+      ),
+    );
+  });
 
-    const container = document.getElementById('container');
-    const outside = document.getElementById('outside');
-    assert.ok(!contains(container!, outside!));
+  test('ref', function () {
+    function Component({ onChange }) {
+      const ref = useRef();
+
+      return (
+        <View>
+          <View testID="container" ref={ref}>
+            <View
+              testID="inside"
+              onPress={(event) => {
+                // TODO: try to get refs working - translate from ref to element
+                onChange(
+                  contains(
+                    getByTestId('container') as unknown as HTMLElement,
+                    event.target,
+                  ),
+                );
+              }}
+            />
+          </View>
+          <View
+            testID="outside"
+            onPress={(event) => {
+              // TODO: try to get refs working - translate from ref to element
+              onChange(
+                contains(
+                  getByTestId('container') as unknown as HTMLElement,
+                  event.target,
+                ),
+              );
+            }}
+          />
+        </View>
+      );
+    }
+
+    let value;
+    const onChange = function (x) {
+      value = x;
+    };
+    const { container } = render(<Component onChange={onChange} />);
+    const getByTestId = getByTestIdFn(container);
+    assert.equal(value, undefined);
+
+    fireEvent.press(getByTestId('inside'), { target: getByTestId('inside') });
+    assert.equal(value, true);
+
+    fireEvent.press(getByTestId('outside'), { target: getByTestId('outside') });
+    assert.equal(value, false);
   });
 });
