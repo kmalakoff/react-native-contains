@@ -1,14 +1,28 @@
-function containsTag(node, tag) {
+function containsNative(node, target) {
   if (!node._nativeTag) {
-    return node === tag;
+    return node === target._nativeTag;
   }
 
-  if (node._nativeTag === tag) {
+  if (node._nativeTag === target._nativeTag) {
     return true;
   }
 
-  for (const child of node._children) {
-    if (containsTag(child, tag)) {
+  for (let i = 0; i < node._children.length; i++) {
+    if (containsNative(node._children[i], target)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function containsDOM(node, target) {
+  if (node == target) {
+    return true;
+  }
+
+  for (let i = 0; i < node.children.length; i++) {
+    if (containsDOM(node.children[i], target)) {
       return true;
     }
   }
@@ -17,11 +31,15 @@ function containsTag(node, tag) {
 }
 
 export default function contains(element, target) {
-  // web
+  // dom built-in
   if (element.contains) {
     return element.contains(target);
+  } // native
+  else if (target._nativeTag) {
+    return containsNative(element, target);
+  } // dom
+  else {
+    return containsDOM(element, target);
   }
-
-  return containsTag(element, target._nativeTag);
 }
 //# sourceMappingURL=index.mjs.map
