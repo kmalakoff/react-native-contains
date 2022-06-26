@@ -9,7 +9,7 @@ import { useRef } from "react",
 import { View } from "react-native",
 import contains from "react-native-contains";
 
-const Component() {
+function Component() {
   const ref = useRef();
   return (
     <View>
