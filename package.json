@@ -52,7 +52,7 @@
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
     "metro-react-native-babel-preset": "^0.71.1",
-    "react-native": "0.69.0",
+    "react-native": "0.69.1",
     "react-native-web": "^0.18.1",
     "react-test-renderer": "^18.2.0",
     "ts-dev-stack": "^0.2.1"
