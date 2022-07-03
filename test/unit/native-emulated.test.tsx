@@ -1,4 +1,4 @@
-import { describe, test } from '@jest/globals';
+import { describe, it } from '@jest/globals';
 import assert from 'assert';
 import React from 'react';
 import { render } from '@testing-library/react-native';
@@ -8,7 +8,7 @@ import contains from 'react-native-contains';
 import toNativeElement from '../lib/toNativeElement';
 
 describe('react-native emulated', function () {
-  test('inside', function () {
+  it('inside', function () {
     const { getByTestId } = render(
       <View>
         <View testID="container">
@@ -24,7 +24,7 @@ describe('react-native emulated', function () {
     );
   });
 
-  test('outside', function () {
+  it('outside', function () {
     const { getByTestId } = render(
       <View>
         <View testID="container" />
