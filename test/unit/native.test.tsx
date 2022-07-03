@@ -1,13 +1,14 @@
-import { describe, test } from '@jest/globals';
+import { describe, it } from '@jest/globals';
 import assert from 'assert';
 import React, { useRef } from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
 
 import { View } from 'react-native';
 import contains from 'react-native-contains';
+// import refToElement from '../lib/refToElement';
 
 describe('react-native', function () {
-  test('inside', function () {
+  it('inside', function () {
     const { getByTestId } = render(
       <View>
         <View testID="container">
@@ -23,7 +24,7 @@ describe('react-native', function () {
     );
   });
 
-  test('outside', function () {
+  it('outside', function () {
     const { getByTestId } = render(
       <View>
         <View testID="container" />
@@ -38,9 +39,9 @@ describe('react-native', function () {
     );
   });
 
-  test('ref', function () {
+  it('ref', function () {
     function Component({ onChange }) {
-      const ref = useRef();
+      const ref = useRef<View>(null);
 
       return (
         <View>
@@ -48,7 +49,6 @@ describe('react-native', function () {
             <View
               testID="inside"
               onPress={(event) => {
-                // TODO: try to get refs working - translate from ref to element?
                 onChange(
                   contains(
                     getByTestId('container') as unknown as HTMLElement,
@@ -61,7 +61,6 @@ describe('react-native', function () {
           <View
             testID="outside"
             onPress={(event) => {
-              // TODO: try to get refs working - translate from ref to element?
               onChange(
                 contains(
                   getByTestId('container') as unknown as HTMLElement,
