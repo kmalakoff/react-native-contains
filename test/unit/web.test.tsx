@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { describe, test } from '@jest/globals';
+import { describe, it } from '@jest/globals';
 import assert from 'assert';
 import React, { useRef } from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
@@ -12,7 +12,7 @@ import contains from 'react-native-contains';
 import getByTestIdFn from '../lib/getByTestIdFn';
 
 describe('react-native-web', function () {
-  test('inside', function () {
+  it('inside', function () {
     const { container } = render(
       <View>
         <View testID="container">
@@ -29,7 +29,7 @@ describe('react-native-web', function () {
     );
   });
 
-  test('outside', function () {
+  it('outside', function () {
     const { container } = render(
       <View>
         <View testID="container" />
@@ -45,9 +45,9 @@ describe('react-native-web', function () {
     );
   });
 
-  test('ref', function () {
+  it('ref', function () {
     function Component({ onChange }) {
-      const ref = useRef();
+      const ref = useRef<View>(null);
 
       return (
         <View>
