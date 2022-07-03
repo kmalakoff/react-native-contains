@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { describe, test } from '@jest/globals';
+import { describe, it } from '@jest/globals';
 import assert from 'assert';
 import React, { useRef } from 'react';
 import { render, fireEvent } from '@testing-library/react';
@@ -11,7 +11,7 @@ import '@testing-library/jest-dom';
 import contains from 'react-native-contains';
 
 describe('react-dom', function () {
-  test('inside', function () {
+  it('inside', function () {
     const { container } = render(
       <div>
         <div id="root">
@@ -27,7 +27,7 @@ describe('react-dom', function () {
     );
   });
 
-  test('outside', function () {
+  it('outside', function () {
     const { container } = render(
       <div>
         <div id="root" />
@@ -42,7 +42,7 @@ describe('react-dom', function () {
     );
   });
 
-  test('ref', function () {
+  it('ref', function () {
     function Component({ onChange }) {
       const ref = useRef();
 
