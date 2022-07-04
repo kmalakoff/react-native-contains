@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 
-import { describe, it } from '@jest/globals';
 import assert from 'assert';
 import React, { useRef } from 'react';
 import { render, fireEvent } from '@testing-library/react';
@@ -44,7 +43,7 @@ describe('react-dom', function () {
 
   it('ref', function () {
     function Component({ onChange }) {
-      const ref = useRef();
+      const ref = useRef<HTMLDivElement>(null);
 
       return (
         <div>
