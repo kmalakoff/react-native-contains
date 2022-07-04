@@ -1,24 +1,24 @@
-export interface NativeElement {
+export interface NativeElement extends Element {
   _nativeTag: number;
   _children: NativeElement[];
 }
 
-function containsNative(node: NativeElement, target: NativeElement) {
+function containsNative(node: NativeElement, targetTag: number) {
   if (!node._nativeTag) {
-    return (node as unknown as number) === target._nativeTag;
+    return (node as unknown as number) === targetTag;
   }
-  if (node._nativeTag === target._nativeTag) {
+  if (node._nativeTag === targetTag) {
     return true;
   }
   for (let i = 0; i < node._children.length; i++) {
-    if (containsNative(node._children[i], target)) {
+    if (containsNative(node._children[i], targetTag)) {
       return true;
     }
   }
   return false;
 }
 
-function containsDOM(node: Element, target: HTMLElement) {
+function containsDOM(node: Element, target: Element) {
   if (node == target) {
     return true;
   }
@@ -31,21 +31,23 @@ function containsDOM(node: Element, target: HTMLElement) {
 }
 
 export default function contains(
-  element: HTMLElement | NativeElement,
-  target: HTMLElement | NativeElement,
+  element: Element | HTMLElement | NativeElement,
+  target: Element | HTMLElement | NativeElement | number,
 ) {
   // dom built-in
   if ((element as HTMLElement).contains) {
     return (element as HTMLElement).contains(target as HTMLElement);
   }
 
-  // native
-  else if ((target as NativeElement)._nativeTag) {
-    return containsNative(element as NativeElement, target as NativeElement);
+  // dom tree
+  else if ((element as Element).children) {
+    return containsDOM(element as Element, target as Element);
   }
 
-  // dom
-  else {
-    return containsDOM(element as Element, target as HTMLElement);
-  }
+  // native
+  const targetTag = (target as NativeElement)._nativeTag;
+  return containsNative(
+    element as NativeElement,
+    targetTag ?? (target as number),
+  );
 }
