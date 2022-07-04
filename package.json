@@ -45,7 +45,7 @@
     "lint": "tsds lint",
     "test": "tsds link && cross-env NODE_OPTIONS=--experimental-vm-modules jest test/**/*.test.*",
     "test:engines": "nvu engines npm test",
-    "version2": "tsds version"
+    "version": "tsds version"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -64,7 +64,7 @@
     "react-native": "0.69.0",
     "react-native-web": "^0.17.7",
     "react-test-renderer": "18.0.0",
-    "ts-dev-stack": "^0.6.5"
+    "ts-dev-stack": "^0.6.6"
   },
   "peerDependencies": {
     "react": "*",
