@@ -1,0 +1,4 @@
+{
+  "upgrade": true,
+  "reject": ["@testing-*", "react", "react-*", "@types/react", "@types/react-*"]
+}

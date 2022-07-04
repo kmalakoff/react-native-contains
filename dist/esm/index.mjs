@@ -1,12 +1,12 @@
-function containsNative(node, target) {
+function containsNative(node, targetTag) {
     if (!node._nativeTag) {
-        return node === target._nativeTag;
+        return node === targetTag;
     }
-    if (node._nativeTag === target._nativeTag) {
+    if (node._nativeTag === targetTag) {
         return true;
     }
     for(let i = 0; i < node._children.length; i++){
-        if (containsNative(node._children[i], target)) {
+        if (containsNative(node._children[i], targetTag)) {
             return true;
         }
     }
@@ -27,9 +27,10 @@ export default function contains(element, target) {
     // dom built-in
     if (element.contains) {
         return element.contains(target);
-    } else if (target._nativeTag) {
-        return containsNative(element, target);
-    } else {
+    } else if (element.children) {
         return containsDOM(element, target);
     }
+    // native
+    const targetTag = target._nativeTag;
+    return containsNative(element, targetTag ?? target);
 };

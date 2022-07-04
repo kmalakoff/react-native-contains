@@ -1,5 +1,5 @@
-export interface NativeElement {
+export interface NativeElement extends Element {
     _nativeTag: number;
     _children: NativeElement[];
 }
-export default function contains(element: HTMLElement | NativeElement, target: HTMLElement | NativeElement): boolean;
+export default function contains(element: Element | HTMLElement | NativeElement, target: Element | HTMLElement | NativeElement | number): boolean;
