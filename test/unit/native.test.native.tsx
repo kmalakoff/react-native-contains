@@ -1,11 +1,9 @@
-import { describe, it } from '@jest/globals';
 import assert from 'assert';
 import React, { useRef } from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
 
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import contains from 'react-native-contains';
-// import refToElement from '../lib/refToElement';
 
 describe('react-native', function () {
   it('inside', function () {
@@ -46,11 +44,13 @@ describe('react-native', function () {
       return (
         <View>
           <View testID="container" ref={ref}>
-            <View
+            <TouchableOpacity
               testID="inside"
               onPress={(event) => {
+                // assert.ok(ref.current === getByTestId('container'))
                 onChange(
                   contains(
+                    // ref.current,
                     getByTestId('container') as unknown as HTMLElement,
                     event.target,
                   ),
@@ -58,7 +58,7 @@ describe('react-native', function () {
               }}
             />
           </View>
-          <View
+          <TouchableOpacity
             testID="outside"
             onPress={(event) => {
               onChange(
