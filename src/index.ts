@@ -31,7 +31,7 @@ function containsDOM(node: Element, target: Element) {
 }
 
 export default function contains(
-  element: Element | HTMLElement | NativeElement,
+  element: Element | HTMLElement | NativeElement | number,
   target: Element | HTMLElement | NativeElement | number,
 ) {
   // dom built-in
