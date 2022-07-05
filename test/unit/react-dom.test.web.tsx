@@ -5,7 +5,6 @@
 import assert from 'assert';
 import React, { useRef } from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 
 import contains from 'react-native-contains';
 
@@ -51,14 +50,14 @@ describe('react-dom', function () {
             <button
               id="inside"
               onClick={(event) => {
-                onChange(contains(ref.current, event.target));
+                onChange(contains(ref.current, event.target as HTMLElement));
               }}
             />
           </div>
           <button
             id="outside"
             onClick={(event) => {
-              onChange(contains(ref.current, event.target));
+              onChange(contains(ref.current, event.target as HTMLElement));
             }}
           />
         </div>
@@ -66,9 +65,7 @@ describe('react-dom', function () {
     }
 
     let value;
-    const onChange = function (x) {
-      value = x;
-    };
+    const onChange = (x) => (value = x);
     const { container } = render(<Component onChange={onChange} />);
     assert.equal(value, undefined);
 
