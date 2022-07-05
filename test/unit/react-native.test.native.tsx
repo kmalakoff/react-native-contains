@@ -38,35 +38,23 @@ describe('react-native', function () {
   });
 
   it('ref', function () {
-    function Component({ onChange }) {
-      const ref = useRef<View>(null);
+    function Component({ onChange, trackRef }) {
+      const ref = useRef<Element>(null);
 
       return (
         <View>
-          <View testID="container" ref={ref}>
+          <View testID="container" ref={() => trackRef(ref, 'container')}>
             <TouchableOpacity
               testID="inside"
               onPress={(event) => {
-                // assert.ok(ref.current === getByTestId('container'))
-                onChange(
-                  contains(
-                    // ref.current,
-                    getByTestId('container') as unknown as HTMLElement,
-                    event.target,
-                  ),
-                );
+                onChange(contains(ref.current, event.target));
               }}
             />
           </View>
           <TouchableOpacity
             testID="outside"
             onPress={(event) => {
-              onChange(
-                contains(
-                  getByTestId('container') as unknown as HTMLElement,
-                  event.target,
-                ),
-              );
+              onChange(contains(ref.current, event.target));
             }}
           />
         </View>
@@ -74,11 +62,14 @@ describe('react-native', function () {
     }
 
     let value;
-    const onChange = function (x) {
-      value = x;
-    };
-    const { getByTestId } = render(<Component onChange={onChange} />);
+    const onChange = (x) => (value = x);
+    const refs = [];
+    const trackRef = (ref, testID) => refs.push({ ref, testID });
+    const { getByTestId } = render(
+      <Component onChange={onChange} trackRef={trackRef} />,
+    );
     assert.equal(value, undefined);
+    refs.forEach(({ ref, testID }) => (ref.current = getByTestId(testID))); // https://github.com/callstack/react-native-testing-library/issues/1006
 
     fireEvent.press(getByTestId('inside'), { target: getByTestId('inside') });
     assert.equal(value, true);

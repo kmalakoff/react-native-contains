@@ -5,7 +5,6 @@
 import assert from 'assert';
 import React, { useRef } from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 
 import { View } from 'react-native-web';
 import contains from 'react-native-contains';
@@ -62,9 +61,7 @@ describe('react-native-web', function () {
     }
 
     let value;
-    const onChange = function (x) {
-      value = x;
-    };
+    const onChange = (x) => (value = x);
     const { findByTestId } = render(<Component onChange={onChange} />);
     assert.equal(value, undefined);
 
