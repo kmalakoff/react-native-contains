@@ -1,7 +1,4 @@
 function containsNative(node, targetTag) {
-    if (!node._nativeTag) {
-        return node === targetTag;
-    }
     if (node._nativeTag === targetTag) {
         return true;
     }
@@ -31,6 +28,5 @@ export default function contains(element, target) {
         return containsDOM(element, target);
     }
     // native
-    const targetTag = target._nativeTag;
-    return containsNative(element, targetTag ?? target);
+    return containsNative(element, target._nativeTag ?? target);
 };

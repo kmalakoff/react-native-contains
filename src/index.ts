@@ -4,9 +4,6 @@ export interface NativeElement extends Element {
 }
 
 function containsNative(node: NativeElement, targetTag: number) {
-  if (!node._nativeTag) {
-    return (node as unknown as number) === targetTag;
-  }
   if (node._nativeTag === targetTag) {
     return true;
   }
@@ -45,9 +42,8 @@ export default function contains(
   }
 
   // native
-  const targetTag = (target as NativeElement)._nativeTag;
   return containsNative(
     element as NativeElement,
-    targetTag ?? (target as number),
+    (target as NativeElement)._nativeTag ?? (target as number),
   );
 }

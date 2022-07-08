@@ -4,15 +4,12 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.reactNativeContains = factory());
 })(this, (function () { 'use strict';
 
-  function containsNative(node, target) {
-      if (!node._nativeTag) {
-          return node === target._nativeTag;
-      }
-      if (node._nativeTag === target._nativeTag) {
+  function containsNative(node, targetTag) {
+      if (node._nativeTag === targetTag) {
           return true;
       }
       for(var i = 0; i < node._children.length; i++){
-          if (containsNative(node._children[i], target)) {
+          if (containsNative(node._children[i], targetTag)) {
               return true;
           }
       }
@@ -33,11 +30,12 @@
       // dom built-in
       if (element.contains) {
           return element.contains(target);
-      } else if (target._nativeTag) {
-          return containsNative(element, target);
-      } else {
+      } else if (element.children) {
           return containsDOM(element, target);
       }
+      var __nativeTag;
+      // native
+      return containsNative(element, (__nativeTag = target._nativeTag) !== null && __nativeTag !== void 0 ? __nativeTag : target);
   }
 
   return contains;

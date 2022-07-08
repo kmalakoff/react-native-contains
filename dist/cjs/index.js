@@ -10,14 +10,11 @@ function contains(element, target) {
     } else if (element.children) {
         return containsDOM(element, target);
     }
+    var __nativeTag;
     // native
-    var targetTag = target._nativeTag;
-    return containsNative(element, targetTag !== null && targetTag !== void 0 ? targetTag : target);
+    return containsNative(element, (__nativeTag = target._nativeTag) !== null && __nativeTag !== void 0 ? __nativeTag : target);
 }
 function containsNative(node, targetTag) {
-    if (!node._nativeTag) {
-        return node === targetTag;
-    }
     if (node._nativeTag === targetTag) {
         return true;
     }
