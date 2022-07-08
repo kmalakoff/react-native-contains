@@ -6,6 +6,20 @@ import { View, TouchableOpacity } from 'react-native';
 import contains from 'react-native-contains';
 
 describe('react-native', function () {
+  it('self', function () {
+    const { getByTestId } = render(
+      <View>
+        <View testID="container" />
+      </View>,
+    );
+    assert.ok(
+      contains(
+        getByTestId('container') as unknown as HTMLElement,
+        getByTestId('container') as unknown as HTMLElement,
+      ),
+    );
+  });
+
   it('inside', function () {
     const { getByTestId } = render(
       <View>
@@ -37,16 +51,20 @@ describe('react-native', function () {
     );
   });
 
-  it('ref', function () {
-    function Component({ onChange, trackRef }) {
+  it('ref', async function () {
+    function Component({ onChange, registerRefValue }) {
       const ref = useRef<Element>(null);
 
       return (
         <View>
-          <View testID="container" ref={() => trackRef(ref, 'container')}>
+          <View
+            testID="container"
+            ref={(value) => registerRefValue({ ref, value })}
+          >
             <TouchableOpacity
               testID="inside"
               onPress={(event) => {
+                assert.ok(Array.isArray(ref.current.children));
                 onChange(contains(ref.current, event.target));
               }}
             />
@@ -54,6 +72,7 @@ describe('react-native', function () {
           <TouchableOpacity
             testID="outside"
             onPress={(event) => {
+              assert.ok(Array.isArray(ref.current.children));
               onChange(contains(ref.current, event.target));
             }}
           />
@@ -63,17 +82,21 @@ describe('react-native', function () {
 
     let value;
     const onChange = (x) => (value = x);
-    const refs = [];
-    const trackRef = (ref, testID) => refs.push({ ref, testID });
-    const { getByTestId } = render(
-      <Component onChange={onChange} trackRef={trackRef} />,
+    const refValues = [];
+    const registerRefValue = (refValue) => refValues.push(refValue);
+    const { getByTestId } = await render(
+      <Component onChange={onChange} registerRefValue={registerRefValue} />,
     );
+    refValues.forEach(
+      ({ ref, value }) => (ref.current = getByTestId(value.props.testID)),
+    ); // https://github.com/callstack/react-native-testing-library/issues/1006
     assert.equal(value, undefined);
-    refs.forEach(({ ref, testID }) => (ref.current = getByTestId(testID))); // https://github.com/callstack/react-native-testing-library/issues/1006
 
+    value = undefined;
     fireEvent.press(getByTestId('inside'), { target: getByTestId('inside') });
     assert.equal(value, true);
 
+    value = undefined;
     fireEvent.press(getByTestId('outside'), { target: getByTestId('outside') });
     assert.equal(value, false);
   });

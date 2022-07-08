@@ -9,6 +9,20 @@ import { render, fireEvent } from '@testing-library/react';
 import contains from 'react-native-contains';
 
 describe('react-dom', function () {
+  it('self', function () {
+    const { container } = render(
+      <div>
+        <div id="root" />
+      </div>,
+    );
+    assert.ok(
+      contains(
+        container.querySelector('#root'),
+        container.querySelector('#root'),
+      ),
+    );
+  });
+
   it('inside', function () {
     const { container } = render(
       <div>
@@ -50,6 +64,7 @@ describe('react-dom', function () {
             <button
               id="inside"
               onClick={(event) => {
+                assert.equal(typeof ref.current.contains, 'function');
                 onChange(contains(ref.current, event.target as HTMLElement));
               }}
             />
@@ -57,6 +72,7 @@ describe('react-dom', function () {
           <button
             id="outside"
             onClick={(event) => {
+              assert.equal(typeof ref.current.contains, 'function');
               onChange(contains(ref.current, event.target as HTMLElement));
             }}
           />
@@ -69,9 +85,11 @@ describe('react-dom', function () {
     const { container } = render(<Component onChange={onChange} />);
     assert.equal(value, undefined);
 
+    value = undefined;
     fireEvent.click(container.querySelector('#inside'));
     assert.equal(value, true);
 
+    value = undefined;
     fireEvent.click(container.querySelector('#outside'));
     assert.equal(value, false);
   });
