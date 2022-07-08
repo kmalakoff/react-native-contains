@@ -1,7 +1,7 @@
 const assert = require('assert');
 const contains = require('react-native-contains');
 
-describe('exports .cjs', function () {
+describe('exports .ts', function () {
   it('defaults', function () {
     assert.equal(typeof contains, 'function');
   });
