@@ -10,6 +10,16 @@ import { View } from 'react-native-web';
 import contains from 'react-native-contains';
 
 describe('react-native-web', function () {
+  it('self', async function () {
+    const { findByTestId } = render(
+      <View>
+        <View testID="root" />
+      </View>,
+    );
+
+    assert.ok(contains(await findByTestId('root'), await findByTestId('root')));
+  });
+
   it('inside', async function () {
     const { findByTestId } = render(
       <View>
@@ -46,6 +56,7 @@ describe('react-native-web', function () {
             <View
               testID="inside"
               onClick={(event) => {
+                assert.equal(typeof ref.current.contains, 'function');
                 onChange(contains(ref.current, event.target));
               }}
             />
@@ -53,6 +64,7 @@ describe('react-native-web', function () {
           <View
             testID="outside"
             onClick={(event) => {
+              assert.equal(typeof ref.current.contains, 'function');
               onChange(contains(ref.current, event.target));
             }}
           />
@@ -65,9 +77,11 @@ describe('react-native-web', function () {
     const { findByTestId } = render(<Component onChange={onChange} />);
     assert.equal(value, undefined);
 
+    value = undefined;
     fireEvent.click(await findByTestId('inside'));
     assert.equal(value, true);
 
+    value = undefined;
     fireEvent.click(await findByTestId('outside'));
     assert.equal(value, false);
   });
