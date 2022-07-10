@@ -2,18 +2,38 @@
  * @jest-environment jsdom
  */
 
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
 import assert from 'assert';
-import React, { useRef } from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { createRoot, Root } from 'react-dom/client';
+import { act } from 'react-dom/test-utils';
 
 import contains from 'react-native-contains';
 
 describe('react-dom', function () {
+  let container: HTMLDivElement | null = null;
+  let root: Root | null = null;
+  beforeEach(function () {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    root = createRoot(container);
+  });
+
+  afterEach(function () {
+    act(() => root.unmount());
+    root = null;
+    container.remove();
+    container = null;
+  });
+
   it('self', function () {
-    const { container } = render(
-      <div>
-        <div id="root" />
-      </div>,
+    act(() =>
+      root.render(
+        <div>
+          <div id="root" />
+        </div>,
+      ),
     );
     assert.ok(
       contains(
@@ -24,12 +44,14 @@ describe('react-dom', function () {
   });
 
   it('inside', function () {
-    const { container } = render(
-      <div>
-        <div id="root">
-          <div id="inside" />
-        </div>
-      </div>,
+    act(() =>
+      root.render(
+        <div>
+          <div id="root">
+            <div id="inside" />
+          </div>
+        </div>,
+      ),
     );
     assert.ok(
       contains(
@@ -40,11 +62,13 @@ describe('react-dom', function () {
   });
 
   it('outside', function () {
-    const { container } = render(
-      <div>
-        <div id="root" />
-        <div id="outside" />
-      </div>,
+    act(() =>
+      root.render(
+        <div>
+          <div id="root" />
+          <div id="outside" />
+        </div>,
+      ),
     );
     assert.ok(
       !contains(
@@ -56,7 +80,7 @@ describe('react-dom', function () {
 
   it('ref', function () {
     function Component({ onChange }) {
-      const ref = useRef<HTMLDivElement>(null);
+      const ref = React.useRef<HTMLDivElement>(null);
 
       return (
         <div>
@@ -82,15 +106,15 @@ describe('react-dom', function () {
 
     let value;
     const onChange = (x) => (value = x);
-    const { container } = render(<Component onChange={onChange} />);
+    act(() => root.render(<Component onChange={onChange} />));
     assert.equal(value, undefined);
 
     value = undefined;
-    fireEvent.click(container.querySelector('#inside'));
+    act(() => (container.querySelector('#inside') as HTMLElement).click());
     assert.equal(value, true);
 
     value = undefined;
-    fireEvent.click(container.querySelector('#outside'));
+    act(() => (container.querySelector('#outside') as HTMLElement).click());
     assert.equal(value, false);
   });
 });

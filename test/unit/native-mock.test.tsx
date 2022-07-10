@@ -1,52 +1,64 @@
 import assert from 'assert';
 import React, { useRef } from 'react';
-import { fireEvent, render } from '@testing-library/react-native';
+import { create, act } from 'react-test-renderer';
 
 import { View, TouchableOpacity } from 'react-native';
 import contains, { NativeElement } from 'react-native-contains';
 import ti2ne from '../lib/testInstanceToNativeElement';
 
-describe('react-native', function () {
-  it('self', function () {
-    const { getByTestId } = render(
-      <View>
-        <View testID="container" />
-      </View>,
+describe('react-native-mock', function () {
+  it('self', async function () {
+    const { root } = await act(() =>
+      create(
+        <View>
+          <View testID="container" />
+        </View>,
+      ),
     );
     assert.ok(
       contains(
-        ti2ne(getByTestId('container')),
-        ti2ne(getByTestId('container')),
+        ti2ne(root.findByProps({ testID: 'container' })),
+        ti2ne(root.findByProps({ testID: 'container' })),
       ),
     );
   });
 
-  it('inside', function () {
-    const { getByTestId } = render(
-      <View>
-        <View testID="container">
-          <View testID="inside" />
-        </View>
-      </View>,
+  it('inside', async function () {
+    const { root } = await act(() =>
+      create(
+        <View>
+          <View testID="container">
+            <View testID="inside" />
+          </View>
+        </View>,
+      ),
     );
     assert.ok(
-      contains(ti2ne(getByTestId('container')), ti2ne(getByTestId('inside'))),
+      contains(
+        ti2ne(root.findByProps({ testID: 'container' })),
+        ti2ne(root.findByProps({ testID: 'inside' })),
+      ),
     );
   });
 
-  it('outside', function () {
-    const { getByTestId } = render(
-      <View>
-        <View testID="container" />
-        <View testID="outside" />
-      </View>,
+  it('outside', async function () {
+    const { root } = await act(() =>
+      create(
+        <View>
+          <View testID="container" />
+          <View testID="outside" />
+        </View>,
+      ),
     );
     assert.ok(
-      !contains(ti2ne(getByTestId('container')), ti2ne(getByTestId('outside'))),
+      !contains(
+        ti2ne(root.findByProps({ testID: 'container' })),
+        ti2ne(root.findByProps({ testID: 'outside' })),
+      ),
     );
   });
 
-  it('ref', function () {
+  it('ref', async function () {
     function Component({ onChange, registerRefValue }) {
       const ref = useRef<NativeElement>(null);
 
@@ -79,38 +91,47 @@ describe('react-native', function () {
     const onChange = (x) => (value = x);
     const refValues = [];
     const registerRefValue = (refValue) => refValues.push(refValue);
-    const { getByTestId } = render(
-      <Component onChange={onChange} registerRefValue={registerRefValue} />,
+    const { root } = await act(() =>
+      create(
+        <Component onChange={onChange} registerRefValue={registerRefValue} />,
+      ),
     );
     refValues.forEach(
       ({ ref, value }) =>
-        (ref.current = ti2ne(getByTestId(value.props.testID))),
+        (ref.current = ti2ne(root.findByProps({ testID: value.props.testID }))),
     ); // https://github.com/callstack/react-native-testing-library/issues/1006
     assert.equal(value, undefined);
 
     value = undefined;
-    fireEvent.press(getByTestId('inside'), {
-      target: ti2ne(getByTestId('inside')),
-    });
+    act(() =>
+      root.findByProps({ testID: 'inside' }).props.onPress({
+        target: ti2ne(root.findByProps({ testID: 'inside' })),
+      }),
+    );
     assert.equal(value, true);
 
     value = undefined;
-    fireEvent.press(getByTestId('outside'), {
-      target: ti2ne(getByTestId('outside')),
-    });
+    act(() =>
+      root.findByProps({ testID: 'outside' }).props.onPress({
+        target: ti2ne(root.findByProps({ testID: 'outside' })),
+      }),
+    );
     assert.equal(value, false);
   });
 
-  it('handles target tag', function () {
-    const { getByTestId } = render(
-      <View>
-        <View testID="container" />
-      </View>,
+  it('handles target tag', async function () {
+    const { root } = await act(() =>
+      create(
+        <View>
+          <View testID="container" />
+        </View>,
+      ),
     );
+
     assert.ok(
       contains(
-        ti2ne(getByTestId('container')),
-        ti2ne(getByTestId('container'))._nativeTag,
+        ti2ne(root.findByProps({ testID: 'container' })),
+        ti2ne(root.findByProps({ testID: 'container' }))._nativeTag,
       ),
     );
   });
