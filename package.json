@@ -61,7 +61,7 @@
     "react-native": "0.69.1",
     "react-native-web": "0.18.0",
     "react-test-renderer": "18.0.0",
-    "ts-dev-stack": "^0.6.6"
+    "ts-dev-stack": "^0.6.7"
   },
   "peerDependencies": {
     "react": "*",
