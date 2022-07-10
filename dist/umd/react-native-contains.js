@@ -8,9 +8,11 @@
       if (node._nativeTag === targetTag) {
           return true;
       }
-      for(var i = 0; i < node._children.length; i++){
-          if (containsNative(node._children[i], targetTag)) {
-              return true;
+      if (node._children) {
+          for(var i = 0; i < node._children.length; i++){
+              if (containsNative(node._children[i], targetTag)) {
+                  return true;
+              }
           }
       }
       return false;
@@ -19,9 +21,11 @@
       if (node == target) {
           return true;
       }
-      for(var i = 0; i < node.children.length; i++){
-          if (containsDOM(node.children[i], target)) {
-              return true;
+      if (node.children) {
+          for(var i = 0; i < node.children.length; i++){
+              if (containsDOM(node.children[i], target)) {
+                  return true;
+              }
           }
       }
       return false;
