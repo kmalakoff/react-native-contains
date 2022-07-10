@@ -57,7 +57,7 @@
     "cross-env": "^7.0.3",
     "jest": "^28.1.2",
     "jest-environment-jsdom": "^28.1.2",
-    "metro-react-native-babel-preset": "^0.71.2",
+    "metro-react-native-babel-preset": "^0.71.3",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "0.69.0",
