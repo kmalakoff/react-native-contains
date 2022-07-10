@@ -1,59 +1,65 @@
 import assert from 'assert';
 import React, { useRef } from 'react';
-import { fireEvent, render } from '@testing-library/react-native';
+import { create, act } from 'react-test-renderer';
 
 import { View, TouchableOpacity } from 'react-native';
-import contains from 'react-native-contains';
+import contains, { NativeElement } from 'react-native-contains';
 
 describe('react-native', function () {
-  it('self', function () {
-    const { getByTestId } = render(
-      <View>
-        <View testID="container" />
-      </View>,
+  it('self', async function () {
+    const { root } = await act(() =>
+      create(
+        <View>
+          <View testID="container" />
+        </View>,
+      ),
     );
     assert.ok(
       contains(
-        getByTestId('container') as unknown as HTMLElement,
-        getByTestId('container') as unknown as HTMLElement,
+        root.findByProps({ testID: 'container' }),
+        root.findByProps({ testID: 'container' }),
       ),
     );
   });
 
-  it('inside', function () {
-    const { getByTestId } = render(
-      <View>
-        <View testID="container">
-          <View testID="inside" />
-        </View>
-      </View>,
+  it('inside', async function () {
+    const { root } = await act(() =>
+      create(
+        <View>
+          <View testID="container">
+            <View testID="inside" />
+          </View>
+        </View>,
+      ),
     );
     assert.ok(
       contains(
-        getByTestId('container') as unknown as HTMLElement,
-        getByTestId('inside') as unknown as HTMLElement,
+        root.findByProps({ testID: 'container' }),
+        root.findByProps({ testID: 'inside' }),
       ),
     );
   });
 
-  it('outside', function () {
-    const { getByTestId } = render(
-      <View>
-        <View testID="container" />
-        <View testID="outside" />
-      </View>,
+  it('outside', async function () {
+    const { root } = await act(() =>
+      create(
+        <View>
+          <View testID="container" />
+          <View testID="outside" />
+        </View>,
+      ),
     );
     assert.ok(
       !contains(
-        getByTestId('container') as unknown as HTMLElement,
-        getByTestId('outside') as unknown as HTMLElement,
+        root.findByProps({ testID: 'container' }),
+        root.findByProps({ testID: 'outside' }),
       ),
     );
   });
 
   it('ref', async function () {
     function Component({ onChange, registerRefValue }) {
-      const ref = useRef<Element>(null);
+      const ref = useRef<NativeElement>(null);
 
       return (
         <View>
@@ -84,20 +90,31 @@ describe('react-native', function () {
     const onChange = (x) => (value = x);
     const refValues = [];
     const registerRefValue = (refValue) => refValues.push(refValue);
-    const { getByTestId } = await render(
-      <Component onChange={onChange} registerRefValue={registerRefValue} />,
+    const { root } = await act(() =>
+      create(
+        <Component onChange={onChange} registerRefValue={registerRefValue} />,
+      ),
     );
     refValues.forEach(
-      ({ ref, value }) => (ref.current = getByTestId(value.props.testID)),
+      ({ ref, value }) =>
+        (ref.current = root.findByProps({ testID: value.props.testID })),
     ); // https://github.com/callstack/react-native-testing-library/issues/1006
     assert.equal(value, undefined);
 
     value = undefined;
-    fireEvent.press(getByTestId('inside'), { target: getByTestId('inside') });
+    act(() =>
+      root.findByProps({ testID: 'inside' }).props.onPress({
+        target: root.findByProps({ testID: 'inside' }),
+      }),
+    );
     assert.equal(value, true);
 
     value = undefined;
-    fireEvent.press(getByTestId('outside'), { target: getByTestId('outside') });
+    act(() =>
+      root.findByProps({ testID: 'outside' }).props.onPress({
+        target: root.findByProps({ testID: 'outside' }),
+      }),
+    );
     assert.equal(value, false);
   });
 });
