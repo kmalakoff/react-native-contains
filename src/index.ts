@@ -7,9 +7,11 @@ function containsNative(node: NativeElement, targetTag: number) {
   if (node._nativeTag === targetTag) {
     return true;
   }
-  for (let i = 0; i < node._children.length; i++) {
-    if (containsNative(node._children[i], targetTag)) {
-      return true;
+  if (node._children) {
+    for (let i = 0; i < node._children.length; i++) {
+      if (containsNative(node._children[i], targetTag)) {
+        return true;
+      }
     }
   }
   return false;
@@ -19,9 +21,11 @@ function containsDOM(node: Element, target: Element) {
   if (node == target) {
     return true;
   }
-  for (let i = 0; i < node.children.length; i++) {
-    if (containsDOM(node.children[i], target)) {
-      return true;
+  if (node.children) {
+    for (let i = 0; i < node.children.length; i++) {
+      if (containsDOM(node.children[i], target)) {
+        return true;
+      }
     }
   }
   return false;
