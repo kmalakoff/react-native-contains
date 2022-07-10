@@ -2,53 +2,86 @@
  * @jest-environment jsdom
  */
 
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
 import assert from 'assert';
-import React, { useRef } from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { createRoot, Root } from 'react-dom/client';
+import { act } from 'react-dom/test-utils';
 
 import { View } from 'react-native-web';
 import contains from 'react-native-contains';
+import getByTestId from '../lib/getByTestId';
 
 describe('react-native-web', function () {
-  it('self', async function () {
-    const { findByTestId } = render(
-      <View>
-        <View testID="root" />
-      </View>,
-    );
-
-    assert.ok(contains(await findByTestId('root'), await findByTestId('root')));
+  let container: HTMLDivElement | null = null;
+  let root: Root | null = null;
+  beforeEach(function () {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    root = createRoot(container);
   });
 
-  it('inside', async function () {
-    const { findByTestId } = render(
-      <View>
-        <View testID="root">
-          <View testID="inside" />
-        </View>
-      </View>,
+  afterEach(function () {
+    act(() => root.unmount());
+    root = null;
+    container.remove();
+    container = null;
+  });
+
+  it('self', function () {
+    act(() =>
+      root.render(
+        <View>
+          <View testID="root" />
+        </View>,
+      ),
     );
 
     assert.ok(
-      contains(await findByTestId('root'), await findByTestId('inside')),
+      contains(getByTestId(container, 'root'), getByTestId(container, 'root')),
     );
   });
 
-  it('outside', async function () {
-    const { findByTestId } = render(
-      <View>
-        <View testID="root" />
-        <View testID="outside" />
-      </View>,
+  it('inside', function () {
+    act(() =>
+      root.render(
+        <View>
+          <View testID="root">
+            <View testID="inside" />
+          </View>
+        </View>,
+      ),
+    );
+
+    assert.ok(
+      contains(
+        getByTestId(container, 'root'),
+        getByTestId(container, 'inside'),
+      ),
+    );
+  });
+
+  it('outside', function () {
+    act(() =>
+      root.render(
+        <View>
+          <View testID="root" />
+          <View testID="outside" />
+        </View>,
+      ),
     );
     assert.ok(
-      !contains(await findByTestId('root'), await findByTestId('outside')),
+      !contains(
+        getByTestId(container, 'root'),
+        getByTestId(container, 'outside'),
+      ),
     );
   });
 
-  it('ref', async function () {
+  it('ref', function () {
     function Component({ onChange }) {
-      const ref = useRef<View>(null);
+      const ref = React.useRef<View>(null);
 
       return (
         <View>
@@ -74,15 +107,15 @@ describe('react-native-web', function () {
 
     let value;
     const onChange = (x) => (value = x);
-    const { findByTestId } = render(<Component onChange={onChange} />);
+    act(() => root.render(<Component onChange={onChange} />));
     assert.equal(value, undefined);
 
     value = undefined;
-    fireEvent.click(await findByTestId('inside'));
+    act(() => (getByTestId(container, 'inside') as HTMLElement).click());
     assert.equal(value, true);
 
     value = undefined;
-    fireEvent.click(await findByTestId('outside'));
+    act(() => (getByTestId(container, 'outside') as HTMLElement).click());
     assert.equal(value, false);
   });
 });
