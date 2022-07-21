@@ -39,7 +39,7 @@
     "format": "tsds format",
     "lint": "tsds lint",
     "test": "tsds link && cross-env NODE_OPTIONS=--experimental-vm-modules jest jest test/**/*.test.*",
-    "test:engines": "tsds test:browser && nvu engines tsds test:node",
+    "test:engines": "nvu engines npm test",
     "version": "tsds version"
   },
   "devDependencies": {
@@ -55,14 +55,14 @@
     "react-native": "0.69.1",
     "react-native-web": "0.18.0",
     "react-test-renderer": "18.0.0",
-    "ts-dev-stack": "^0.6.12"
+    "ts-dev-stack": "^0.6.15"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "tsds": {
     "source": "src/index.ts",
