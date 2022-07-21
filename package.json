@@ -13,21 +13,10 @@
     "universal",
     "typescript"
   ],
+  "repository": "kmalakoff/react-native-contains",
   "license": "MIT",
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
-  "files": [
-    "dist"
-  ],
-  "tsds": {
-    "source": "src/index.ts",
-    "globals": {
-      "react": "React",
-      "react-native": "ReactNative"
-    }
-  },
   "type": "module",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.mjs",
   "exports": {
     ".": {
       "import": "./dist/esm/index.mjs",
@@ -36,32 +25,37 @@
     },
     "./*": "./*"
   },
+  "main": "dist/cjs/index.js",
+  "unpkg": "dist/umd/react-native-contains.js",
+  "module": "dist/esm/index.mjs",
   "types": "dist/types/index.d.ts",
-  "repository": "kmalakoff/react-native-contains",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsds build",
+    "coverage": "tsds link && cross-env NODE_OPTIONS=--experimental-vm-modules jest test/**/*.test.* --collect-coverage",
     "deploy": "tsds deploy",
     "format": "tsds format",
     "lint": "tsds lint",
     "test": "tsds link && cross-env NODE_OPTIONS=--experimental-vm-modules jest jest test/**/*.test.*",
-    "coverage": "tsds link && cross-env NODE_OPTIONS=--experimental-vm-modules jest test/**/*.test.* --collect-coverage",
-    "test:engines": "nvu engines npm test",
+    "test:engines": "tsds test:browser && nvu engines tsds test:node",
     "version": "tsds version"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.4",
+    "@types/jest": "^28.1.6",
     "@types/react": "18.0.0",
     "@types/react-native": "0.69.1",
     "cross-env": "^7.0.3",
-    "jest": "^28.1.2",
-    "jest-environment-jsdom": "^28.1.2",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^28.1.3",
     "metro-react-native-babel-preset": "^0.71.3",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "0.69.1",
     "react-native-web": "0.18.0",
     "react-test-renderer": "18.0.0",
-    "ts-dev-stack": "^0.6.7"
+    "ts-dev-stack": "^0.6.12"
   },
   "peerDependencies": {
     "react": "*",
@@ -70,5 +64,11 @@
   "engines": {
     "node": ">=12"
   },
-  "unpkg": "dist/umd/react-native-contains.js"
+  "tsds": {
+    "source": "src/index.ts",
+    "globals": {
+      "react": "React",
+      "react-native": "ReactNative"
+    }
+  }
 }
