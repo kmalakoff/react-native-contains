@@ -4,7 +4,7 @@ updates:
     directory: '/'
     schedule:
       interval: daily
-    ignore
+    ignore:
       - dependency-name: 'react-native'
       - dependency-name: 'react-native-web'
   - package-ecosystem: 'github-actions'
