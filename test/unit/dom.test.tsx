@@ -12,6 +12,8 @@ import { act } from 'react-dom/test-utils';
 import contains from 'react-native-contains';
 
 describe('react-dom', function () {
+  jest.setTimeout(20000);
+
   let container: HTMLDivElement | null = null;
   let root: Root | null = null;
   beforeEach(function () {
