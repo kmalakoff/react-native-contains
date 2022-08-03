@@ -14,6 +14,8 @@ import contains from 'react-native-contains';
 import getByTestId from '../lib/getByTestId';
 
 describe('react-native-web', function () {
+  jest.setTimeout(20000);
+
   let container: HTMLDivElement | null = null;
   let root: Root | null = null;
   beforeEach(function () {
