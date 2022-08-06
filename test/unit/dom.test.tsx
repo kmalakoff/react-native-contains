@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 global.IS_REACT_ACT_ENVIRONMENT = true;
 
 import assert from 'assert';
@@ -12,7 +8,7 @@ import { act } from 'react-dom/test-utils';
 import contains from 'react-native-contains';
 
 describe('react-dom', function () {
-  jest.setTimeout(20000);
+  this.timeout(20000);
 
   let container: HTMLDivElement | null = null;
   let root: Root | null = null;

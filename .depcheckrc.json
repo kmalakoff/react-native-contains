@@ -4,8 +4,6 @@
     "react-native-contains",
     "@types/*",
     "@typescript-eslint/*",
-    "eslint-*",
-    "jest-*",
-    "metro-*"
+    "eslint-*"
   ]
 }

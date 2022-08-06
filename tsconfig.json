@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es2015", "dom"],
-    "types": ["jest", "node"],
+    "types": ["mocha", "node", "react-native"],
     "target": "es2020",
     "module": "esnext",
     "moduleResolution": "node",
@@ -12,6 +12,6 @@
     "allowJs": true,
     "jsx": "react"
   },
-  "exclude": ["node_modules", "dist"],
-  "include": ["src", "test"]
+  "exclude": ["dist"],
+  "include": ["src", "test", "node_modules/react-native"]
 }

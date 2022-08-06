@@ -2,12 +2,14 @@ import assert from 'assert';
 import React, { useRef } from 'react';
 import { create, act } from 'react-test-renderer';
 
-import { View, TouchableOpacity } from 'react-native';
+import * as RN from 'react-native';
 import contains, { NativeElement } from 'react-native-contains';
 import ti2ne from '../lib/testInstanceToNativeElement';
 
+const { View, TouchableOpacity } = RN;
+
 describe('react-native-mock', function () {
-  jest.setTimeout(20000);
+  this.timeout(20000);
 
   it('self', async function () {
     const { root } = await act(() =>
