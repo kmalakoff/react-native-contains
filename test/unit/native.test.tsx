@@ -6,6 +6,8 @@ import { View, TouchableOpacity } from 'react-native';
 import contains, { NativeElement } from 'react-native-contains';
 
 describe('react-native', function () {
+  jest.setTimeout(20000);
+
   it('self', async function () {
     const { root } = await act(() =>
       create(
