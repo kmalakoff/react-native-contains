@@ -1,5 +1,5 @@
 {
-  "extends": "./node_modules/ts-dev-stack/.depcheckrc.json",
+  "extends": "./node_modules/ts-dev-stack/config/.depcheckrc.json",
   "ignores": [
     "react-native-contains",
     "@types/*",
