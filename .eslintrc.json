@@ -1,6 +1,10 @@
 {
-  "extends": "./node_modules/ts-dev-stack/.eslintrc.json",
+  "extends": "./node_modules/ts-dev-stack/config/.eslintrc.json",
+  "env": {
+    "node": true
+  },
   "rules": {
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "mocha/no-setup-in-describe": "off"
   }
 }
