@@ -7,6 +7,8 @@ import contains, { NativeElement } from 'react-native-contains';
 import ti2ne from '../lib/testInstanceToNativeElement';
 
 describe('react-native-mock', function () {
+  jest.setTimeout(20000);
+
   it('self', async function () {
     const { root } = await act(() =>
       create(
