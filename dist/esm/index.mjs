@@ -12,7 +12,7 @@ function containsNative(node, targetTag) {
     return false;
 }
 function containsDOM(node, target) {
-    if (node == target) {
+    if (node === target) {
         return true;
     }
     if (node.children) {
@@ -28,7 +28,9 @@ export default function contains(element, target) {
     // dom built-in
     if (element.contains) {
         return element.contains(target);
-    } else if (element.children) {
+    }
+    // dom tree
+    if (element.children) {
         return containsDOM(element, target);
     }
     // native

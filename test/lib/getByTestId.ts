@@ -1,7 +1,5 @@
 function match(element: Element, testID: string): boolean {
-  const propsKey = Object.keys(element).find(function (x) {
-    return x.startsWith('__reactProps');
-  });
+  const propsKey = Object.keys(element).find((x) => x.startsWith('__reactProps'));
   return propsKey ? element[propsKey]['data-testid'] === testID : false;
 }
 
@@ -12,13 +10,12 @@ export default function getByTestId(element: Element, testID: string) {
       if (found) return found;
     }
     return null;
-  } else {
-    if (match(element, testID)) return element;
-    if (!element.children) return;
-    for (let i = 0; i < element.children.length; i++) {
-      const found = getByTestId(element.children[i], testID);
-      if (found) return found;
-    }
-    return null;
   }
+  if (match(element, testID)) return element;
+  if (!element.children) return;
+  for (let i = 0; i < element.children.length; i++) {
+    const found = getByTestId(element.children[i], testID);
+    if (found) return found;
+  }
+  return null;
 }

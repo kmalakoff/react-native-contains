@@ -18,7 +18,7 @@
       return false;
   }
   function containsDOM(node, target) {
-      if (node == target) {
+      if (node === target) {
           return true;
       }
       if (node.children) {
@@ -34,7 +34,9 @@
       // dom built-in
       if (element.contains) {
           return element.contains(target);
-      } else if (element.children) {
+      }
+      // dom tree
+      if (element.children) {
           return containsDOM(element, target);
       }
       var __nativeTag;
