@@ -5,87 +5,75 @@
 global.IS_REACT_ACT_ENVIRONMENT = true;
 
 import assert from 'assert';
-import React from 'react';
-import { createRoot, Root } from 'react-dom/client';
+import { useRef } from 'react';
+import { Root, createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
 import contains from 'react-native-contains';
 
-describe('react-dom', function () {
+describe('react-dom', () => {
+  jest.setTimeout(20000);
+
   let container: HTMLDivElement | null = null;
   let root: Root | null = null;
-  beforeEach(function () {
+  beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     act(() => root.unmount());
     root = null;
     container.remove();
     container = null;
   });
 
-  it('self', function () {
+  it('self', () => {
     act(() =>
       root.render(
         <div>
           <div id="root" />
-        </div>,
-      ),
+        </div>
+      )
     );
-    assert.ok(
-      contains(
-        container.querySelector('#root'),
-        container.querySelector('#root'),
-      ),
-    );
+    assert.ok(contains(container.querySelector('#root'), container.querySelector('#root')));
   });
 
-  it('inside', function () {
+  it('inside', () => {
     act(() =>
       root.render(
         <div>
           <div id="root">
             <div id="inside" />
           </div>
-        </div>,
-      ),
+        </div>
+      )
     );
-    assert.ok(
-      contains(
-        container.querySelector('#root'),
-        container.querySelector('#inside'),
-      ),
-    );
+    assert.ok(contains(container.querySelector('#root'), container.querySelector('#inside')));
   });
 
-  it('outside', function () {
+  it('outside', () => {
     act(() =>
       root.render(
         <div>
           <div id="root" />
           <div id="outside" />
-        </div>,
-      ),
+        </div>
+      )
     );
-    assert.ok(
-      !contains(
-        container.querySelector('#root'),
-        container.querySelector('#outside'),
-      ),
-    );
+    assert.ok(!contains(container.querySelector('#root'), container.querySelector('#outside')));
   });
 
-  it('ref', function () {
+  it('ref', () => {
     function Component({ onChange }) {
-      const ref = React.useRef<HTMLDivElement>(null);
+      const ref = useRef<HTMLDivElement>(null);
 
       return (
         <div>
           <div ref={ref}>
             <button
+              type="button"
               id="inside"
               onClick={(event) => {
                 assert.equal(typeof ref.current.contains, 'function');
@@ -94,6 +82,7 @@ describe('react-dom', function () {
             />
           </div>
           <button
+            type="button"
             id="outside"
             onClick={(event) => {
               assert.equal(typeof ref.current.contains, 'function');
@@ -104,7 +93,8 @@ describe('react-dom', function () {
       );
     }
 
-    let value;
+    let value: unknown;
+    // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
     const onChange = (x) => (value = x);
     act(() => root.render(<Component onChange={onChange} />));
     assert.equal(value, undefined);

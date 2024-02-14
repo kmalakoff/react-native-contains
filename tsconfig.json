@@ -10,7 +10,8 @@
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "allowJs": true,
-    "jsx": "react"
+    "allowUmdGlobalAccess": true,
+    "jsx": "react-jsx"
   },
   "exclude": ["node_modules", "dist"],
   "include": ["src", "test"]
