@@ -1,0 +1,1 @@
+ignores: ["react-native-contains", "depcheck", "ts-dev-stack", "@types/*", "jest-*", "react", "react-*", "metro-react-native-babel-preset"]
