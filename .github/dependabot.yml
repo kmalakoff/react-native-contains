@@ -4,10 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
-    ignore:
-      - dependency-name: "jsdom"
-      - dependency-name: "react-native"
-      - dependency-name: "react-native-web"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

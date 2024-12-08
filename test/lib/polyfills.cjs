@@ -2,10 +2,10 @@
   if (typeof window !== 'undefined') return; // running in the browser
 
   const jsdom = require('jsdom');
-  const doc = new jsdom.jsdom('<!doctype html><html><body></body></html>');
-  global.document = doc;
-  global.window = doc.defaultView;
-  global.navigator = doc.defaultView.navigator;
+  const doc = new jsdom.JSDOM('<!doctype html><html><body></body></html>');
+  global.window = doc.window;
+  global.document = doc.window.document;
+  global.navigator = doc.window.navigator;
   global.ShadowRoot = function ShadowRoot() {
     /* empty */
   };
