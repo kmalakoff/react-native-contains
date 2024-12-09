@@ -2,18 +2,12 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-module.exports = contains;
-function contains(element, target) {
-    // dom built-in
-    if (element.contains) {
-        return element.contains(target);
-    } else if (element.children) {
-        return containsDOM(element, target);
+Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function() {
+        return contains;
     }
-    var __nativeTag;
-    // native
-    return containsNative(element, (__nativeTag = target._nativeTag) !== null && __nativeTag !== void 0 ? __nativeTag : target);
-}
+});
 function containsNative(node, targetTag) {
     if (node._nativeTag === targetTag) {
         return true;
@@ -28,7 +22,7 @@ function containsNative(node, targetTag) {
     return false;
 }
 function containsDOM(node, target) {
-    if (node == target) {
+    if (node === target) {
         return true;
     }
     if (node.children) {
@@ -40,3 +34,17 @@ function containsDOM(node, target) {
     }
     return false;
 }
+function contains(element, target) {
+    // dom built-in
+    if (element.contains) {
+        return element.contains(target);
+    }
+    // dom tree
+    if (element.children) {
+        return containsDOM(element, target);
+    }
+    var _target__nativeTag;
+    // native
+    return containsNative(element, (_target__nativeTag = target._nativeTag) !== null && _target__nativeTag !== void 0 ? _target__nativeTag : target);
+}
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; } } catch (_) {}; module.exports = exports.default; }
