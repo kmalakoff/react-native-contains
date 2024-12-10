@@ -18,7 +18,7 @@
       return false;
   }
   function containsDOM(node, target) {
-      if (node == target) {
+      if (node === target) {
           return true;
       }
       if (node.children) {
@@ -34,12 +34,14 @@
       // dom built-in
       if (element.contains) {
           return element.contains(target);
-      } else if (element.children) {
+      }
+      // dom tree
+      if (element.children) {
           return containsDOM(element, target);
       }
-      var __nativeTag;
+      var _target__nativeTag;
       // native
-      return containsNative(element, (__nativeTag = target._nativeTag) !== null && __nativeTag !== void 0 ? __nativeTag : target);
+      return containsNative(element, (_target__nativeTag = target._nativeTag) !== null && _target__nativeTag !== void 0 ? _target__nativeTag : target);
   }
 
   return contains;
