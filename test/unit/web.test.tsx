@@ -1,87 +1,73 @@
-/**
- * @jest-environment jsdom
- */
-
-global.IS_REACT_ACT_ENVIRONMENT = true;
+// @ts-ignore
+(typeof global === 'undefined' ? window : global).IS_REACT_ACT_ENVIRONMENT = true;
+import '../lib/polyfills.cjs';
 
 import assert from 'assert';
-import React from 'react';
-import { createRoot, Root } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
+import React, { useRef, act } from 'react';
+import { type Root, createRoot } from 'react-dom/client';
 
-import { View } from 'react-native-web';
+// @ts-ignore
 import contains from 'react-native-contains';
+import { View } from 'react-native-web';
 import getByTestId from '../lib/getByTestId';
 
-describe('react-native-web', function () {
+describe('react-native-web', () => {
   let container: HTMLDivElement | null = null;
   let root: Root | null = null;
-  beforeEach(function () {
+  beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     act(() => root.unmount());
     root = null;
     container.remove();
     container = null;
   });
 
-  it('self', function () {
+  it('self', () => {
     act(() =>
       root.render(
         <View>
           <View testID="root" />
-        </View>,
-      ),
+        </View>
+      )
     );
 
-    assert.ok(
-      contains(getByTestId(container, 'root'), getByTestId(container, 'root')),
-    );
+    assert.ok(contains(getByTestId(container, 'root'), getByTestId(container, 'root')));
   });
 
-  it('inside', function () {
+  it('inside', () => {
     act(() =>
       root.render(
         <View>
           <View testID="root">
             <View testID="inside" />
           </View>
-        </View>,
-      ),
+        </View>
+      )
     );
 
-    assert.ok(
-      contains(
-        getByTestId(container, 'root'),
-        getByTestId(container, 'inside'),
-      ),
-    );
+    assert.ok(contains(getByTestId(container, 'root'), getByTestId(container, 'inside')));
   });
 
-  it('outside', function () {
+  it('outside', () => {
     act(() =>
       root.render(
         <View>
           <View testID="root" />
           <View testID="outside" />
-        </View>,
-      ),
+        </View>
+      )
     );
-    assert.ok(
-      !contains(
-        getByTestId(container, 'root'),
-        getByTestId(container, 'outside'),
-      ),
-    );
+    assert.ok(!contains(getByTestId(container, 'root'), getByTestId(container, 'outside')));
   });
 
-  it('ref', function () {
+  it('ref', () => {
     function Component({ onChange }) {
-      const ref = React.useRef<View>(null);
+      const ref = useRef<View>(null);
 
       return (
         <View>
@@ -105,7 +91,8 @@ describe('react-native-web', function () {
       );
     }
 
-    let value;
+    let value: unknown;
+    // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
     const onChange = (x) => (value = x);
     act(() => root.render(<Component onChange={onChange} />));
     assert.equal(value, undefined);
