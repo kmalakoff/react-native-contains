@@ -4,9 +4,7 @@ import type { NativeElement } from '../../src/index';
 let _nativeTag = 1;
 const map = new Map();
 
-export default function testInstanceToNativeElement(
-  node: ReactTestInstance,
-): NativeElement {
+export default function testInstanceToNativeElement(node: ReactTestInstance): NativeElement {
   const found = map.get(node);
   if (found) return found;
 
