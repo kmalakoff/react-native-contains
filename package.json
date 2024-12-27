@@ -52,7 +52,7 @@
     "react-dom": "^18.3.1",
     "react-native": "^0.76.5",
     "react-native-web": "^0.19.13",
-    "react-test-renderer": "^18.3.1",
+    "react-test-renderer": "^19.0.0",
     "ts-swc-loaders": "^1.5.0",
     "tsds-web-test-runner": "^1.6.3"
   },
