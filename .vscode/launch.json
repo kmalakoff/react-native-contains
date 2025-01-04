@@ -2,21 +2,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Jest",
       "type": "node",
       "request": "launch",
-      "runtimeArgs": [
-        "--inspect-brk",
-        "--experimental-vm-modules",
-        "${workspaceRoot}/node_modules/.bin/jest",
-        "--runInBand"
-      ],
+      "name": "test:node (mac)",
+      "program": "/Users/kevin/.nvm/versions/node/v22.12.0/lib/node_modules/ts-dev-stack/bin/cli.cjs",
+      "args": ["test:node", "--no-timeouts"],
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "port": 9229,
-      "env": {
-        "BABEL_ENV": "test"
-      }
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "test:node (windows)",
+      "program": "C:/Program Files (x86)/nodejs/node_modules/ts-dev-stack/bin/cli.cjs",
+      "args": ["test:node", "--no-timeouts"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }

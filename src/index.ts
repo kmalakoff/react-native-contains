@@ -18,7 +18,7 @@ function containsNative(node: NativeElement, targetTag: number) {
 }
 
 function containsDOM(node: Element, target: Element) {
-  if (node == target) {
+  if (node === target) {
     return true;
   }
   if (node.children) {
@@ -31,23 +31,17 @@ function containsDOM(node: Element, target: Element) {
   return false;
 }
 
-export default function contains(
-  element: Element | HTMLElement | NativeElement | number,
-  target: Element | HTMLElement | NativeElement | number,
-) {
+export default function contains(element: Element | HTMLElement | NativeElement | number, target: Element | HTMLElement | NativeElement | number) {
   // dom built-in
   if ((element as HTMLElement).contains) {
     return (element as HTMLElement).contains(target as HTMLElement);
   }
 
   // dom tree
-  else if ((element as Element).children) {
+  if ((element as Element).children) {
     return containsDOM(element as Element, target as Element);
   }
 
   // native
-  return containsNative(
-    element as NativeElement,
-    (target as NativeElement)._nativeTag ?? (target as number),
-  );
+  return containsNative(element as NativeElement, (target as NativeElement)._nativeTag ?? (target as number));
 }
