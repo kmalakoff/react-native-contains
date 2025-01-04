@@ -34,6 +34,7 @@
   ],
   "scripts": {
     "build": "tsds build",
+    "clean": "node -e \"const dir = require('path').join(require('os').homedir(), '.im'); try {require('fs').rmdirSync(dir, {recursive: true})} catch(err) {}\"",
     "deploy": "tsds deploy",
     "docs": "tsds docs",
     "format": "biome check --write --unsafe src/ test/",
@@ -53,7 +54,7 @@
     "react-native": "^0.76.5",
     "react-native-web": "^0.19.13",
     "react-test-renderer": "^18.3.1",
-    "tsds-web-test-runner": "^1.11.15"
+    "tsds-web-test-runner": "^1.11.22"
   },
   "peerDependencies": {
     "react": "*",
