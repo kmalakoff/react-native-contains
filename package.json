@@ -1,6 +1,6 @@
 {
   "name": "react-native-contains",
-  "version": "0.1.11",
+  "version": "0.1.13",
   "description": "Universal element contains for react, react-native, and react-native web",
   "keywords": [
     "react-native",
@@ -13,62 +13,65 @@
     "universal",
     "typescript"
   ],
+  "repository": "kmalakoff/react-native-contains",
   "license": "MIT",
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
-  "files": [
-    "dist"
-  ],
-  "tsds": {
-    "source": "src/index.ts",
-    "globals": {
-      "react": "React",
-      "react-native": "ReactNative"
-    }
-  },
   "type": "module",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.mjs",
   "exports": {
     ".": {
       "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js",
+      "require": "./dist/cjs/index.cjs",
       "types": "./dist/types/index.d.ts"
     },
     "./*": "./*"
   },
+  "main": "dist/cjs/index.cjs",
+  "unpkg": "dist/umd/react-native-contains.cjs",
+  "module": "dist/esm/index.mjs",
   "types": "dist/types/index.d.ts",
-  "repository": "kmalakoff/react-native-contains",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsds build",
     "deploy": "tsds deploy",
-    "format": "tsds format",
-    "lint": "tsds lint",
-    "test": "tsds link && cross-env NODE_OPTIONS=--experimental-vm-modules jest jest test/**/*.test.*",
-    "coverage": "tsds link && cross-env NODE_OPTIONS=--experimental-vm-modules jest test/**/*.test.* --collect-coverage",
+    "docs": "tsds docs",
+    "format": "biome check --write --unsafe src/ test/",
+    "test": "tsds test:browser --config wtr.config.mjs",
     "test:engines": "nvu engines npm test",
     "version": "tsds version"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.4",
-    "@types/react": "18.0.0",
-    "@types/react-native": "0.69.1",
-    "cross-env": "^7.0.3",
-    "jest": "^28.1.2",
-    "jest-environment-jsdom": "^28.1.2",
-    "metro-react-native-babel-preset": "^0.71.3",
-    "react": "18.0.0",
-    "react-dom": "18.0.0",
-    "react-native": "0.69.1",
-    "react-native-web": "0.18.0",
-    "react-test-renderer": "18.0.0",
-    "ts-dev-stack": "^0.6.6"
+    "@biomejs/biome": "^1.9.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.1",
+    "@web/dev-server-import-maps": "^0.2.1",
+    "jsdom": "^25.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-native": "^0.76.5",
+    "react-native-web": "^0.19.13",
+    "react-test-renderer": "^18.3.1",
+    "tsds-web-test-runner": "^1.11.15"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
-  "unpkg": "dist/umd/react-native-contains.js"
+  "tsds": {
+    "source": "src/index.ts",
+    "targets": [
+      "cjs",
+      "esm",
+      "umd"
+    ],
+    "globals": {
+      "react": "React",
+      "react-native": "ReactNative"
+    }
+  }
 }

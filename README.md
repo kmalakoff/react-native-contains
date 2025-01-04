@@ -4,7 +4,7 @@ Universal element contains for react, react-native, and react-native web
 
 ### Example 1
 
-```jsx
+```tsx
 import { useRef } from "react",
 import { View } from "react-native",
 import contains from "react-native-contains";

@@ -1,0 +1,1 @@
+ignores: ["react-native-contains",  "@types/*", "@biomejs/*", "tsds-web-test-runner", "react", "react-*", "ts-swc-loaders"]
