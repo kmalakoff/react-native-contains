@@ -5,12 +5,10 @@ updates:
     schedule:
       interval: weekly
     ignore:
-       - dependency-name: '@types/react'
-      - dependency-name: '@types/react-dom'
       - dependency-name: 'react'
       - dependency-name: 'react-dom'
-      - dependency-name: 'react-test-renderer'
       - dependency-name: 'react-native'      
+      - dependency-name: 'react-test-renderer'
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
