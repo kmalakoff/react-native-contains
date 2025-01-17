@@ -39,7 +39,7 @@
     "docs": "tsds docs",
     "format": "biome check --write --unsafe src/ test/",
     "test": "tsds test:browser --config wtr.config.mjs",
-    "test:engines": "nvu engines npm test",
+    "test:engines": "npm test",
     "version": "tsds version"
   },
   "devDependencies": {
