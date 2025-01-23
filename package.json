@@ -44,15 +44,15 @@
   "devDependencies": {
     "@types/mocha": "*",
     "@types/node": "*",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "*",
+    "@types/react-dom": "*",
     "@web/dev-server-import-maps": "*",
     "jsdom": "*",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "*",
+    "react-dom": "*",
     "react-native": "*",
     "react-native-web": "*",
-    "react-test-renderer": "^18.3.1",
+    "react-test-renderer": "*",
     "tsds-web-test-runner": "*"
   },
   "peerDependencies": {
@@ -61,6 +61,24 @@
   },
   "engines": {
     "node": ">=16"
+  },
+  "overrides": {
+    "react-native": {
+      "@types/react": "latest",
+      "react": "latest"
+    },
+    "react-native-web": {
+      "@types/react": "latest",
+      "@types/react-dom": "latest",
+      "react": "latest",
+      "react-dom": "latest"
+    },
+    "@react-native/virtualized-lists": {
+      "@types/react": "latest",
+      "@types/react-dom": "latest",
+      "react": "latest",
+      "react-dom": "latest"
+    }
   },
   "tsds": {
     "source": "src/index.ts",
