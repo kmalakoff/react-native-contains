@@ -1,8 +1,15 @@
 const assert = require('assert');
-const contains = require('react-native-contains/dist/umd/react-native-contains.cjs');
 
-describe('exports react-native-contains/dist/umd/react-native-contains.cjs', () => {
+let umd = null;
+try {
+  umd = require('react-native-contains/umd');
+} catch (_) {
+  umd = require('react-native-contains/dist/umd/react-native-contains.cjs');
+}
+const reactNativeContains = typeof window !== 'undefined' ? window.reactNativeContains : umd.default || umd;
+
+describe('exports umd', () => {
   it('defaults', () => {
-    assert.equal(typeof contains, 'function');
+    assert.equal(typeof reactNativeContains, 'function');
   });
 });
