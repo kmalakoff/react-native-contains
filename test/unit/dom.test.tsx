@@ -3,7 +3,7 @@
 import '../lib/polyfills.cjs';
 
 import assert from 'assert';
-import React, { useRef, act } from 'react';
+import React, { act } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
 
 // @ts-ignore
@@ -63,7 +63,7 @@ describe('react-dom', () => {
 
   it('ref', () => {
     function Component({ onChange }) {
-      const ref = useRef<HTMLDivElement>(null);
+      const ref = React.useRef<HTMLDivElement>(null);
 
       return (
         <div>

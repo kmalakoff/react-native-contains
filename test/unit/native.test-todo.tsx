@@ -1,5 +1,5 @@
 import assert from 'assert';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { act, create } from 'react-test-renderer';
 
 import { TouchableOpacity, View } from 'react-native';
