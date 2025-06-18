@@ -1,11 +1,11 @@
 import assert from 'assert';
-import React, { useRef } from 'react';
-import { act, create } from 'react-test-renderer';
+import { useRef } from 'react';
+import type { GestureResponderEvent } from 'react-native';
 
 import { TouchableOpacity, View } from 'react-native';
-import type { GestureResponderEvent } from 'react-native';
 // @ts-ignore
 import contains, { type NativeElement } from 'react-native-contains';
+import { act, create } from 'react-test-renderer';
 import ti2ne from '../lib/testInstanceToNativeElement';
 
 describe('react-native-mock', () => {
@@ -73,14 +73,16 @@ describe('react-native-mock', () => {
     }
 
     let value: unknown;
-    // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-    const onChange = (x) => (value = x);
+    const onChange = (x) => {
+      value = x;
+    };
     const refValues = [];
     const registerRefValue = (refValue) => refValues.push(refValue);
     const { root } = await act(() => create(<Component onChange={onChange} registerRefValue={registerRefValue} />));
 
-    // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-    refValues.forEach(({ ref, value }) => (ref.current = ti2ne(root.findByProps({ testID: value.props.testID })))); // https://github.com/callstack/react-native-testing-library/issues/1006
+    refValues.forEach(({ ref, value }) => {
+      ref.current = ti2ne(root.findByProps({ testID: value.props.testID }));
+    }); // https://github.com/callstack/react-native-testing-library/issues/1006
     assert.equal(value, undefined);
 
     value = undefined;
