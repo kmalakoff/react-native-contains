@@ -3,8 +3,8 @@
 import '../lib/polyfills.cjs';
 
 import assert from 'assert';
-import React, { useRef, act } from 'react';
-import { type Root, createRoot } from 'react-dom/client';
+import React, { act } from 'react';
+import { createRoot, type Root } from 'react-dom/client';
 
 // @ts-ignore
 import contains from 'react-native-contains';
@@ -63,7 +63,7 @@ describe('react-dom', () => {
 
   it('ref', () => {
     function Component({ onChange }) {
-      const ref = useRef<HTMLDivElement>(null);
+      const ref = React.useRef<HTMLDivElement>(null);
 
       return (
         <div>
@@ -90,8 +90,9 @@ describe('react-dom', () => {
     }
 
     let value: unknown;
-    // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-    const onChange = (x) => (value = x);
+    const onChange = (x) => {
+      value = x;
+    };
     act(() => root.render(<Component onChange={onChange} />));
     assert.equal(value, undefined);
 
