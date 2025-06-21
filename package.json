@@ -13,7 +13,10 @@
     "universal",
     "typescript"
   ],
-  "repository": "kmalakoff/react-native-contains",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmalakoff/react-native-contains.git"
+  },
   "license": "MIT",
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
   "type": "module",
