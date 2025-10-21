@@ -3,7 +3,6 @@ import { useRef } from 'react';
 import type { GestureResponderEvent } from 'react-native';
 
 import { TouchableOpacity, View } from 'react-native';
-// @ts-ignore
 import contains, { type NativeElement } from 'react-native-contains';
 import { act, create } from 'react-test-renderer';
 
