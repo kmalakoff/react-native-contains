@@ -1,5 +1,4 @@
 import assert from 'assert';
-// @ts-ignore
 import contains from 'react-native-contains';
 
 describe('exports .mjs', () => {
