@@ -1,4 +1,3 @@
-// @ts-ignore
 (typeof global === 'undefined' ? window : global).IS_REACT_ACT_ENVIRONMENT = true;
 import '../lib/polyfills.cjs';
 
@@ -6,7 +5,6 @@ import assert from 'assert';
 import React, { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
-// @ts-ignore
 import contains from 'react-native-contains';
 
 describe('react-dom', () => {
