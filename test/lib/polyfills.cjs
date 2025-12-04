@@ -13,8 +13,3 @@
     /* empty */
   };
 })();
-
-if (!Array.prototype.includes)
-  Array.prototype.includes = function (x) {
-    this.indexOf(x) >= 0;
-  };
