@@ -44,20 +44,20 @@
     "version": "tsds version"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.10",
-    "@types/node": "^25.0.1",
+    "@types/mocha": "*",
+    "@types/node": "*",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@web/dev-server-import-maps": "^0.2.1",
     "jsdom": "^27.3.0",
-    "node-version-use": "^2.1.6",
+    "node-version-use": "*",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-native": "^0.83.0",
     "react-test-renderer": "^19.2.3",
-    "ts-dev-stack": "^1.21.3",
-    "tsds-config": "^0.2.1",
-    "tsds-web-test-runner": "^1.19.4"
+    "ts-dev-stack": "*",
+    "tsds-config": "*",
+    "tsds-web-test-runner": "*"
   },
   "peerDependencies": {
     "react": "^19.2.1",
