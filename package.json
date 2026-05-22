@@ -46,22 +46,22 @@
   "devDependencies": {
     "@types/mocha": "*",
     "@types/node": "*",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
+    "@types/react": "*",
+    "@types/react-dom": "*",
     "@web/dev-server-import-maps": "^0.2.1",
-    "jsdom": "^27.3.0",
+    "jsdom": "^29.1.1",
     "node-version-use": "*",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-native": "^0.83.0",
-    "react-test-renderer": "^19.2.3",
+    "react": "*",
+    "react-dom": "*",
+    "react-native": "*",
+    "react-test-renderer": "*",
     "ts-dev-stack": "*",
     "tsds-config": "*",
     "tsds-web-test-runner": "*"
   },
   "peerDependencies": {
-    "react": "^19.2.1",
-    "react-native": "^0.83.0"
+    "react": "*",
+    "react-native": "*"
   },
   "engines": {
     "node": ">=16"
