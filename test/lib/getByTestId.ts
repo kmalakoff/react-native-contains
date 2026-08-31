@@ -1,9 +1,9 @@
 function match(element: Element, testID: string): boolean {
   const propsKey = Object.keys(element).find((x) => x.startsWith('__reactProps'));
-  return propsKey ? element[propsKey]['data-testid'] === testID : false;
+  return propsKey ? (element as unknown as Record<string, Record<string, unknown>>)[propsKey]['data-testid'] === testID : false;
 }
 
-export default function getByTestId(element: Element, testID: string) {
+export default function getByTestId(element: Element, testID: string): Element | null | undefined {
   if (Array.isArray(element)) {
     for (let i = 0; i < element.length; i++) {
       const found = getByTestId(element[i], testID);

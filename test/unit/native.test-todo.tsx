@@ -15,7 +15,7 @@ describe('react-native', () => {
         </View>
       )
     );
-    assert.ok(contains(root.findByProps({ testID: 'container' }), root.findByProps({ testID: 'container' })));
+    assert.ok(contains(root.findByProps({ testID: 'container' }) as unknown as NativeElement, root.findByProps({ testID: 'container' }) as unknown as NativeElement));
   });
 
   it('inside', async () => {
@@ -28,7 +28,7 @@ describe('react-native', () => {
         </View>
       )
     );
-    assert.ok(contains(root.findByProps({ testID: 'container' }), root.findByProps({ testID: 'inside' })));
+    assert.ok(contains(root.findByProps({ testID: 'container' }) as unknown as NativeElement, root.findByProps({ testID: 'inside' }) as unknown as NativeElement));
   });
 
   it('outside', async () => {
@@ -40,12 +40,12 @@ describe('react-native', () => {
         </View>
       )
     );
-    assert.ok(!contains(root.findByProps({ testID: 'container' }), root.findByProps({ testID: 'outside' })));
+    assert.ok(!contains(root.findByProps({ testID: 'container' }) as unknown as NativeElement, root.findByProps({ testID: 'outside' }) as unknown as NativeElement));
   });
 
   // TODO: fix rn usig web shim
   it.skip('ref', async () => {
-    function Component({ onChange, registerRefValue }) {
+    function Component({ onChange, registerRefValue }: { onChange: (value: boolean) => void; registerRefValue: (refValue: unknown) => void }) {
       const ref = useRef<NativeElement>(null);
 
       return (
@@ -54,16 +54,16 @@ describe('react-native', () => {
             <TouchableOpacity
               testID="inside"
               onPress={(event: GestureResponderEvent) => {
-                assert.ok(Array.isArray(ref.current.children));
-                onChange(contains(ref.current, event.target as unknown as NativeElement));
+                assert.ok(Array.isArray((ref.current as NativeElement).children));
+                onChange(contains(ref.current as NativeElement, event.target as unknown as NativeElement));
               }}
             />
           </View>
           <TouchableOpacity
             testID="outside"
             onPress={(event: GestureResponderEvent) => {
-              assert.ok(Array.isArray(ref.current.children));
-              onChange(contains(ref.current, event.target as unknown as NativeElement));
+              assert.ok(Array.isArray((ref.current as NativeElement).children));
+              onChange(contains(ref.current as NativeElement, event.target as unknown as NativeElement));
             }}
           />
         </View>
@@ -71,21 +71,23 @@ describe('react-native', () => {
     }
 
     let value: unknown;
-    const onChange = (x) => {
+    const onChange = (x: boolean) => {
       value = x;
     };
-    const refValues = [];
-    const registerRefValue = (refValue) => refValues.push(refValue);
+    const refValues: { ref: React.RefObject<NativeElement>; value: { props: { testID: string } } }[] = [];
+    const registerRefValue = (refValue: unknown): void => {
+      refValues.push(refValue as { ref: React.RefObject<NativeElement>; value: { props: { testID: string } } });
+    };
     const { root } = await act(() => create(<Component onChange={onChange} registerRefValue={registerRefValue} />));
 
     refValues.forEach(({ ref, value }) => {
-      ref.current = root.findByProps({ testID: value.props.testID });
+      ref.current = root.findByProps({ testID: value.props.testID }) as unknown as NativeElement;
     }); // https://github.com/callstack/react-native-testing-library/issues/1006
     assert.equal(value, undefined);
 
     value = undefined;
     act(() =>
-      root.findByProps({ testID: 'inside' }).props.onPress({
+      (root.findByProps({ testID: 'inside' }).props.onPress as (e: unknown) => void)({
         target: root.findByProps({ testID: 'inside' }),
       })
     );
@@ -93,7 +95,7 @@ describe('react-native', () => {
 
     value = undefined;
     act(() =>
-      root.findByProps({ testID: 'outside' }).props.onPress({
+      (root.findByProps({ testID: 'outside' }).props.onPress as (e: unknown) => void)({
         target: root.findByProps({ testID: 'outside' }),
       })
     );
