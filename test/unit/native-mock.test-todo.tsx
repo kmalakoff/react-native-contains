@@ -46,7 +46,7 @@ describe('react-native-mock', () => {
 
   // TODO: fix rn usig web shim
   it.skip('ref', async () => {
-    function Component({ onChange, registerRefValue }) {
+    function Component({ onChange, registerRefValue }: { onChange: (value: boolean) => void; registerRefValue: (refValue: unknown) => void }) {
       const ref = useRef<NativeElement>(null);
 
       return (
@@ -55,16 +55,16 @@ describe('react-native-mock', () => {
             <TouchableOpacity
               testID="inside"
               onPress={(event: GestureResponderEvent) => {
-                assert.equal(typeof ref.current._nativeTag, 'number');
-                onChange(contains(ref.current, event.target as unknown as NativeElement));
+                assert.equal(typeof (ref.current as NativeElement)._nativeTag, 'number');
+                onChange(contains(ref.current as NativeElement, event.target as unknown as NativeElement));
               }}
             />
           </View>
           <TouchableOpacity
             testID="outside"
             onPress={(event: GestureResponderEvent) => {
-              assert.equal(typeof ref.current._nativeTag, 'number');
-              onChange(contains(ref.current, event.target as unknown as NativeElement));
+              assert.equal(typeof (ref.current as NativeElement)._nativeTag, 'number');
+              onChange(contains(ref.current as NativeElement, event.target as unknown as NativeElement));
             }}
           />
         </View>
@@ -72,32 +72,34 @@ describe('react-native-mock', () => {
     }
 
     let value: unknown;
-    const onChange = (x) => {
+    const onChange = (x: boolean) => {
       value = x;
     };
-    const refValues = [];
-    const registerRefValue = (refValue) => refValues.push(refValue);
+    const refValues: { ref: { current: NativeElement | null }; value: { props: { testID: string } } }[] = [];
+    const registerRefValue = (refValue: unknown): void => {
+      refValues.push(refValue as { ref: { current: NativeElement | null }; value: { props: { testID: string } } });
+    };
     const { root } = await act(() => create(<Component onChange={onChange} registerRefValue={registerRefValue} />));
 
     refValues.forEach(({ ref, value }) => {
-      ref.current = ti2ne(root.findByProps({ testID: value.props.testID }));
+      (ref as { current: NativeElement | null }).current = ti2ne(root.findByProps({ testID: value.props.testID }));
     }); // https://github.com/callstack/react-native-testing-library/issues/1006
     assert.equal(value, undefined);
 
     value = undefined;
-    act(() =>
-      root.findByProps({ testID: 'inside' }).props.onPress({
+    act(() => {
+      (root.findByProps({ testID: 'inside' }).props.onPress as (e: unknown) => void)({
         target: ti2ne(root.findByProps({ testID: 'inside' })),
-      })
-    );
+      });
+    });
     assert.equal(value, true);
 
     value = undefined;
-    act(() =>
-      root.findByProps({ testID: 'outside' }).props.onPress({
+    act(() => {
+      (root.findByProps({ testID: 'outside' }).props.onPress as (e: unknown) => void)({
         target: ti2ne(root.findByProps({ testID: 'outside' })),
-      })
-    );
+      });
+    });
     assert.equal(value, false);
   });
 
