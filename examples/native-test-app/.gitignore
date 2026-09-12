@@ -1,0 +1,9 @@
+*.xcworkspace/
+.DS_Store
+.watchman-*
+.xcode.env
+dist/
+ios/DerivedData/
+ios/Pods/
+ios/build/
+node_modules/

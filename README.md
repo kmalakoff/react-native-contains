@@ -1,31 +1,37 @@
-## react-native-contains
+# react-native-contains
 
-Universal element contains for react, react-native, and react-native web
+Check whether one element or native view contains another element or native tag.
 
-### Example 1
+## Install
+
+```sh
+npm install react react-native react-native-contains
+```
+
+## Use
 
 ```tsx
-import { useRef } from "react",
-import { View } from "react-native",
+import { useRef } from "react";
+import { Pressable, View } from "react-native";
 import contains from "react-native-contains";
 
 function Component() {
-  const ref = useRef();
+  const ref = useRef(null);
   return (
     <View>
       <View ref={ref}>
-        <View onPress={((event) => {
-          contains(ref.current, event.target); // true
-        })}/>
+        <Pressable onPress={(event) => {
+          console.log(contains(ref.current, event.target)); // true
+        }} />
       </View>
-      <View onPress={((event) => {
-        contains(ref.current, event.target); // false
-      })}/>
+      <Pressable onPress={(event) => {
+        console.log(contains(ref.current, event.target)); // false
+      }} />
     </View>
-  )
+  );
 }
 ```
 
-### Documentation
+## Documentation
 
 [API Docs](https://kmalakoff.github.io/react-native-contains/)
