@@ -4,6 +4,7 @@ dist/
 docs/
 npm-debug.log*
 .tmp/
+.worktrees/
 .cache/
 
 # agents
@@ -11,3 +12,4 @@ npm-debug.log*
 AGENTS.md
 .claude/
 CLAUDE.md
+.archive/

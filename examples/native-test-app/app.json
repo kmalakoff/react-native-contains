@@ -1,0 +1,16 @@
+{
+  "name": "ContainsSmoke",
+  "displayName": "ContainsSmoke",
+  "components": [
+    {
+      "appKey": "ContainsSmoke",
+      "displayName": "ContainsSmoke"
+    }
+  ],
+  "ios": {
+    "bundleIdentifier": "com.reactnativecontains.smoke"
+  },
+  "resources": {
+    "ios": ["dist/assets", "dist/main.ios.jsbundle"]
+  }
+}
