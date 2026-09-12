@@ -12,10 +12,10 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         # os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: 26
       - run: git config --global user.name "Github Actions"
       - run: git config --global user.email "actions@users.noreply.github.com"
       - run: npm ci
@@ -23,3 +23,52 @@ jobs:
       - run: npm run prepublishOnly
       - run: npm run test
       - run: npm run test:engines
+  ios-native-smoke:
+    name: iOS native smoke
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+      - run: npm ci
+      - run: npm run build
+      - name: Install fixture dependencies
+        working-directory: examples/native-test-app
+        run: npm ci
+      - name: Validate fixture
+        working-directory: examples/native-test-app
+        run: npm run validate
+      - name: Build iOS bundle
+        working-directory: examples/native-test-app
+        run: npm run build:ios
+      - name: Install iOS dependencies
+        working-directory: examples/native-test-app
+        run: pod install --project-directory=ios
+      - name: Build and install fixture
+        working-directory: examples/native-test-app
+        run: npm run ios -- --no-packager
+      - name: Set up Java for Maestro
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Maestro
+        run: |
+          export MAESTRO_VERSION=2.7.0
+          curl -fsSL https://get.maestro.mobile.dev | bash
+      - name: Run Maestro flow
+        env:
+          # Cold CI simulators can take longer than Maestro's two-minute default.
+          MAESTRO_DRIVER_STARTUP_TIMEOUT: '600000'
+        run: |
+          export PATH="$HOME/.maestro/bin:$PATH"
+          maestro test test/integration/maestro/native-contains.yaml
+      - name: Upload Maestro diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-diagnostics
+          path: ~/.maestro/tests
+          include-hidden-files: true

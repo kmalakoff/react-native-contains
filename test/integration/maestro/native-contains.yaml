@@ -1,0 +1,5 @@
+appId: com.reactnativecontains.smoke
+---
+- launchApp:
+    clearState: true
+- assertVisible: "CONTAINS_SMOKE_PASS"
