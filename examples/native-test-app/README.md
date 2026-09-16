@@ -15,7 +15,7 @@ Build and run the iOS fixture on a selected simulator:
 ```sh
 npm run build:ios
 pod install --project-directory=ios
-npm run ios -- --no-packager --udid <simulator-udid>
+bash ../../test/integration/build-ios.sh <simulator-udid>
 ```
 
 Build and run the Android fixture on an API 35 emulator:
@@ -33,3 +33,6 @@ maestro --device <simulator-udid> test ../../test/integration/maestro/native-con
 ```
 
 The CI workflow uses the same Android runner script and device commands.
+
+The iOS helper builds for the selected simulator, installs with `simctl`, verifies
+the application container, and launches it before Maestro runs.
