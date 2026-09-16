@@ -6,5 +6,9 @@ module.exports = {
       sourceDir: 'ios',
       automaticPodsInstallation: false,
     },
+    android: {
+      packageName: 'com.reactnativecontains.smoke',
+      sourceDir: 'android',
+    },
   }),
 };

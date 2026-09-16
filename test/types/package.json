@@ -1,0 +1,11 @@
+{
+  "name": "react-native-contains-type-fixture",
+  "private": true,
+  "type": "module",
+  "source": "src/index.ts",
+  "tsds": {
+    "targets": [
+      "cjs"
+    ]
+  }
+}

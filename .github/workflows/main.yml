@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
 jobs:
   test:
     name: Node.js ${{ matrix.os }}
@@ -24,7 +28,7 @@ jobs:
       - run: npm run test
       - run: npm run test:engines
   ios-native-smoke:
-    name: iOS native smoke
+    name: iOS native smoke (RN 0.87.1)
     runs-on: macos-26
     timeout-minutes: 60
     steps:
@@ -48,7 +52,35 @@ jobs:
         run: pod install --project-directory=ios
       - name: Build and install fixture
         working-directory: examples/native-test-app
-        run: npm run ios -- --no-packager
+        env:
+          SIMULATOR_DEVICE: iPhone 16
+        run: |
+          DEVICE_INFO="$(
+            xcrun simctl list devices available --json |
+              SIMULATOR_DEVICE="$SIMULATOR_DEVICE" node -e '
+                let input = "";
+                process.stdin.setEncoding("utf8");
+                process.stdin.on("data", chunk => { input += chunk; });
+                process.stdin.on("end", () => {
+                  const data = JSON.parse(input);
+                  const device = Object.values(data.devices).flat().find(candidate => candidate.name === process.env.SIMULATOR_DEVICE && candidate.isAvailable);
+                  if (!device) {
+                    console.error(`No available simulator named ${process.env.SIMULATOR_DEVICE}`);
+                    process.exitCode = 1;
+                    return;
+                  }
+                  process.stdout.write(`${device.udid}\t${device.state}`);
+                });
+              '
+          )"
+          IFS=$'\t' read -r DEVICE_UDID DEVICE_STATE <<< "$DEVICE_INFO"
+          test -n "$DEVICE_UDID"
+          echo "SIMULATOR_UDID=$DEVICE_UDID" >> "$GITHUB_ENV"
+          if [ "$DEVICE_STATE" != "Booted" ]; then
+            xcrun simctl boot "$DEVICE_UDID"
+          fi
+          xcrun simctl bootstatus "$DEVICE_UDID" -b
+          npm run ios -- --no-packager --udid "$DEVICE_UDID"
       - name: Set up Java for Maestro
         uses: actions/setup-java@v5
         with:
@@ -64,11 +96,72 @@ jobs:
           MAESTRO_DRIVER_STARTUP_TIMEOUT: '600000'
         run: |
           export PATH="$HOME/.maestro/bin:$PATH"
-          maestro test test/integration/maestro/native-contains.yaml
+          maestro --device "$SIMULATOR_UDID" test test/integration/maestro/native-contains.yaml
+      - name: Print simulator diagnostics
+        if: failure()
+        run: |
+          mkdir -p .tmp
+          xcrun simctl list devices
+          xcrun simctl io "$SIMULATOR_UDID" screenshot .tmp/native-contains-ios.png || true
       - name: Upload Maestro diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: maestro-diagnostics
-          path: ~/.maestro/tests
+          path: |
+            .tmp/native-contains-ios.png
+            ~/.maestro/tests
+            ~/Library/Logs/CoreSimulator
+          include-hidden-files: true
+  android-native-smoke:
+    name: Android native smoke (RN 0.87.1)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: npm ci
+      - run: npm run build
+      - name: Install fixture dependencies
+        working-directory: examples/native-test-app
+        run: npm ci
+      - name: Validate fixture
+        working-directory: examples/native-test-app
+        run: npm run validate
+      - name: Build Android bundle
+        working-directory: examples/native-test-app
+        run: npm run build:android
+      - name: Install Maestro
+        run: |
+          export MAESTRO_VERSION=2.7.0
+          curl -fsSL https://get.maestro.mobile.dev | bash
+      - name: Enable KVM group permissions
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Build and install fixture on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          disable-animations: true
+          script: bash test/integration/run-android.sh
+      - name: Upload Android diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-android-diagnostics
+          path: |
+            .tmp/android-logcat.txt
+            ~/.maestro/tests
           include-hidden-files: true

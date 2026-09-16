@@ -8,9 +8,9 @@ export default createConfig({
       inject: {
         importMap: {
           imports: {
-            react: 'https://esm.sh/react?dev',
-            'react-dom': 'https://esm.sh/react-dom?dev',
-            'react-dom/client': 'https://esm.sh/react-dom/client.js?dev',
+            react: 'https://esm.sh/react@19.3.0?dev',
+            'react-dom': 'https://esm.sh/react-dom@19.3.0?dev',
+            'react-dom/client': 'https://esm.sh/react-dom@19.3.0/client.js?dev',
           },
         },
       },

@@ -6,4 +6,7 @@ dist/
 ios/DerivedData/
 ios/Pods/
 ios/build/
+android/.gradle/
+android/build/
+android/app/build/
 node_modules/

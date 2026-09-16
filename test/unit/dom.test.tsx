@@ -6,7 +6,7 @@ import assert from 'assert';
 import React, { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
-import contains from 'react-native-contains';
+import contains, { type ChildrenElement } from 'react-native-contains';
 
 const suite = typeof document === 'undefined' ? describe.skip : describe;
 
@@ -104,5 +104,26 @@ suite('react-dom', () => {
     value = undefined;
     act(() => ((container as HTMLDivElement).querySelector('#outside') as HTMLElement).click());
     assert.equal(value, false);
+  });
+
+  it('contains real text nodes and rejects text from another tree', () => {
+    const inside = document.createTextNode('inside');
+    const outside = document.createTextNode('outside');
+    const host = document.createElement('div');
+    host.appendChild(inside);
+    assert.equal(contains(host, inside), true);
+    assert.equal(contains(host, outside), false);
+  });
+});
+
+describe('children fallback', () => {
+  it('traverses plain legacy trees without a public contains method', () => {
+    const target: ChildrenElement = { children: [] };
+    const nested: ChildrenElement = { children: [target] };
+    const root: ChildrenElement = { children: [{ children: [] }, nested] };
+
+    assert.equal(contains(root, target), true);
+    assert.equal(contains(root, root), true);
+    assert.equal(contains(root, { children: [] }), false);
   });
 });
