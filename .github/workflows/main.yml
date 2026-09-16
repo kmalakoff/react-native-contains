@@ -158,7 +158,11 @@ jobs:
           profile: pixel_2
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           disable-animations: true
-          script: bash test/integration/run-android.sh
+          # The disposable Google APIs image's launcher can show an ANR dialog
+          # over the fixture; native interaction tests do not need a home screen.
+          script: |
+            adb shell pm disable-user --user 0 com.google.android.apps.nexuslauncher
+            bash test/integration/run-android.sh
       - name: Upload Android diagnostics
         if: failure() || cancelled()
         uses: actions/upload-artifact@v4
