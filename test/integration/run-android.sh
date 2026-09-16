@@ -22,7 +22,8 @@ export MAESTRO_DRIVER_STARTUP_TIMEOUT=600000
 
 adb wait-for-device
 adb shell getprop sys.boot_completed | grep -m 1 '1'
-npm run android -- --no-packager
+APP_ID="$(node -p 'require("./app.json").android.package')"
+npm run android -- --no-packager --appId "$APP_ID"
 
 ANDROID_DEVICE="${ANDROID_SERIAL:-$(adb devices | awk 'NR > 1 && $2 == "device" { print $1; exit }')}"
 test -n "$ANDROID_DEVICE"
