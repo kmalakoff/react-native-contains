@@ -30,7 +30,7 @@ function App() {
   }
 
   return (
-    <View>
+    <View style={{ flex: 1, paddingTop: 120, paddingHorizontal: 24 }}>
       <View ref={containerRef}>
         <Text>container</Text>
         <Pressable
