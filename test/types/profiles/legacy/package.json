@@ -1,0 +1,10 @@
+{
+  "name": "react-native-contains-types-legacy",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@types/react": "16.9.56",
+    "@types/react-native": "0.57.65",
+    "typescript": "5.9.3"
+  }
+}
