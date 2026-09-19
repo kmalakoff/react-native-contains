@@ -25,8 +25,12 @@ export function mount(container: Element, children?: React.ReactNode): MountedRo
   if (typeof legacyReactDOM.render === 'function') {
     if (children !== undefined) legacyReactDOM.render(children, container);
     return {
-      render: (nextChildren) => legacyReactDOM.render(nextChildren, container),
-      unmount: () => legacyReactDOM.unmountComponentAtNode(container),
+      render: (nextChildren) => {
+        legacyReactDOM.render(nextChildren, container);
+      },
+      unmount: () => {
+        legacyReactDOM.unmountComponentAtNode(container);
+      },
     };
   }
 
