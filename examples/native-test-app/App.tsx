@@ -1,5 +1,5 @@
 import { type ComponentRef, useRef, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import contains, { type NativeHost } from 'react-native-contains';
 
 function App() {
@@ -33,25 +33,27 @@ function App() {
     <View style={{ flex: 1, paddingTop: 120, paddingHorizontal: 24 }}>
       <View ref={containerRef}>
         <Text>container</Text>
-        <Pressable
+        <View
           testID="inside-target"
           style={{ minHeight: 48, minWidth: 200, backgroundColor: '#ccf' }}
-          onPress={(event) => checkTouch('INSIDE', insideRef.current, event.target, true)}
+          onStartShouldSetResponder={() => true}
+          onResponderRelease={(event) => checkTouch('INSIDE', insideRef.current, event.target, true)}
         >
           <View ref={insideRef}>
             <Text>inside touch target</Text>
           </View>
-        </Pressable>
+        </View>
       </View>
-      <Pressable
+      <View
         testID="outside-target"
         style={{ minHeight: 48, minWidth: 200, backgroundColor: '#fcc' }}
-        onPress={(event) => checkTouch('OUTSIDE', outsideRef.current, event.target, false)}
+        onStartShouldSetResponder={() => true}
+        onResponderRelease={(event) => checkTouch('OUTSIDE', outsideRef.current, event.target, false)}
       >
         <View ref={outsideRef}>
           <Text>outside touch target</Text>
         </View>
-      </Pressable>
+      </View>
       <Text testID="containment-result">{result}</Text>
     </View>
   );
