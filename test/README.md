@@ -13,3 +13,5 @@ Routine browser endpoints pin React and ReactDOM together at 16.8.0 and 19.3.0. 
 The React 16.8 profile supports synchronous `act` callbacks only, and the current tests use synchronous callbacks. Async callbacks require a React version with async `act` support and are not covered by this matrix.
 
 The Node 16 check loads the packed ESM and CommonJS entries. It also checks plain-tree containment. It does not certify SSR or component rendering in Node.
+
+GitHub Actions calls a pinned shared native workflow hosted in react-native-outside. It packs this candidate together with reviewed event, contains, outside and boundary revisions, then runs the shared assertions on Android and iOS with RN 0.87.1 and React 19.2.3. The [caller workflow](../.github/workflows/main.yml) records the exact fixture revision. Legacy RN 0.59 device compatibility remains unverified.
