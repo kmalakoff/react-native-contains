@@ -10,4 +10,6 @@ Use Node 26 for development tooling. Each browser profile installs its own lockf
 
 Routine browser endpoints pin React and ReactDOM together at 16.8.0 and 19.3.0. All profiles use the same behavioral assertions. React 16/17 use legacy mounting; React 18/19 use createRoot. Local bundled bridges keep one React instance and avoid CDN conversion.
 
+The React 16.8 profile supports synchronous `act` callbacks only, and the current tests use synchronous callbacks. Async callbacks require a React version with async `act` support and are not covered by this matrix.
+
 The Node 16 check loads the packed ESM and CommonJS entries. It also checks plain-tree containment. It does not certify SSR or component rendering in Node.

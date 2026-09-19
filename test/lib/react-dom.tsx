@@ -14,6 +14,8 @@ type ReactDOMClientModule = typeof ReactDOMClient & {
 
 export type MountedRoot = { render: (children: React.ReactNode) => void; unmount: () => void };
 
+// React 16.8 supports synchronous act callbacks only.
+// Async callbacks require a supporting React version and are outside this matrix.
 export function act(callback: () => void | Promise<void>): void | Promise<void> {
   const reactAct = (React as typeof React & { act?: (callback: () => void | Promise<void>) => unknown }).act;
   const actImplementation = reactAct ?? ReactDOMTestUtils.act;
