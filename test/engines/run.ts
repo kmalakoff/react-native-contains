@@ -9,6 +9,7 @@ import { extract } from 'tar';
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const fixtureSource = path.dirname(fileURLToPath(import.meta.url));
 const packageName = JSON.parse(readFileSync(path.join(repoRoot, 'package.json'), 'utf8')).name;
+mkdirSync(path.join(repoRoot, '.tmp'), { recursive: true });
 const fixtureRoot = mkdtempSync(path.join(repoRoot, '.tmp/engine-fixture-'));
 const npmExecutable = process.env.npm_execpath;
 if (!npmExecutable) throw new Error('npm_execpath is required to run the engine fixture');

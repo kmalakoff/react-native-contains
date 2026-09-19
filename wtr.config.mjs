@@ -2,12 +2,19 @@ import { importMapsPlugin } from '@web/dev-server-import-maps';
 import createConfig from 'tsds-web-test-runner/createConfig.mjs';
 import { prepareReactProfile } from './test/lib/local-react-bundle.mjs';
 
+const profileSettings = {
+  minimum: { port: 9010 },
+  current: { port: 9011 },
+  react17: { port: 9012 },
+  react18: { port: 9013 },
+};
 const profile = process.env.REACT_TEST_PROFILE || 'current';
-if (profile !== 'minimum' && profile !== 'current') throw new Error(`Unknown React browser profile: ${profile}`);
+const settings = profileSettings[profile];
+if (!settings) throw new Error(`Unknown React browser profile: ${profile}`);
 
 const config = createConfig({
   hostname: '127.0.0.1',
-  port: profile === 'minimum' ? 9010 : 9011,
+  port: settings.port,
   nodeResolve: {
     modulePaths: [`${process.cwd()}/test/browser/${profile}/node_modules`],
   },

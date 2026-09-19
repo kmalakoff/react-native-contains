@@ -40,6 +40,7 @@
     "format": "tsds format",
     "prepublishOnly": "tsds validate",
     "test": "npm run test:types && node test/lib/browser.mjs && tsds test:node --no-timeouts --exclude test/unit/dom.test.tsx --exclude test/exports/umd-browser.test.ts",
+    "test:browser:checkpoints": "node test/lib/browser-checkpoints.mjs",
     "test:engines": "npm run build && node test/engines/run.ts",
     "test:types": "npm run build && node test/types/run.mjs",
     "version": "tsds version"

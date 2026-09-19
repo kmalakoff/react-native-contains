@@ -21,6 +21,20 @@ export function act(callback: () => void | Promise<void>): void | Promise<void> 
 }
 
 export function mount(container: Element, children?: React.ReactNode): MountedRoot {
+  const createRoot = (ReactDOMClient as ReactDOMClientModule).createRoot;
+  if (createRoot) {
+    const root = createRoot(container);
+    if (children !== undefined) root.render(children);
+    return {
+      render: (nextChildren) => {
+        root.render(nextChildren);
+      },
+      unmount: () => {
+        root.unmount();
+      },
+    };
+  }
+
   const legacyReactDOM = ReactDOM as unknown as LegacyReactDOM;
   if (typeof legacyReactDOM.render === 'function') {
     if (children !== undefined) legacyReactDOM.render(children, container);
@@ -34,11 +48,7 @@ export function mount(container: Element, children?: React.ReactNode): MountedRo
     };
   }
 
-  const createRoot = (ReactDOMClient as ReactDOMClientModule).createRoot;
-  if (!createRoot) throw new Error('ReactDOM client createRoot is unavailable');
-  const root = createRoot(container);
-  if (children !== undefined) root.render(children);
-  return { render: (nextChildren) => root.render(nextChildren), unmount: () => root.unmount() };
+  throw new Error('ReactDOM mount APIs are unavailable');
 }
 
 export function unmount(root: MountedRoot | null): void | Promise<void> {

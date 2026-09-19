@@ -1,3 +1,3 @@
 import { runBrowserProfiles } from './browser-profiles.mjs';
 
-runBrowserProfiles(['minimum', 'current']);
+runBrowserProfiles(['react17', 'react18']);
