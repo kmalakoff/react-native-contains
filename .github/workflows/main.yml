@@ -23,7 +23,7 @@ jobs:
       - run: git config --global user.name "Github Actions"
       - run: git config --global user.email "actions@users.noreply.github.com"
       - run: npm ci
-      - run: npx -y playwright install --with-deps
+      - run: npx -y playwright install --with-deps chromium
       - run: npm run prepublishOnly
       - run: npm run test
       - run: npm run test:engines
