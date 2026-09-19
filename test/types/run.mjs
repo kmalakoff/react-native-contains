@@ -9,6 +9,7 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../
 const fixtureSource = path.dirname(fileURLToPath(import.meta.url));
 const packageManifest = JSON.parse(readFileSync(path.join(repoRoot, 'package.json'), 'utf8'));
 const packageName = packageManifest.name;
+mkdirSync(path.join(repoRoot, '.tmp'), { recursive: true });
 const fixtureRoot = mkdtempSync(path.join(repoRoot, '.tmp/type-fixture-'));
 const npmEnvironment = { ...process.env, npm_config_cache: path.join(fixtureRoot, 'npm-cache') };
 const npmExecutable = process.env.npm_execpath;
