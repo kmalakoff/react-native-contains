@@ -7,6 +7,24 @@ on:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      run_native:
+        description: Run the optional native compatibility workflow
+        type: boolean
+        required: false
+        default: false
+      native_profile:
+        description: Native profile; minimum and all include exploratory legacy testing
+        type: choice
+        required: false
+        default: current
+        options: [current, minimum, minimum-android, all]
+      native_platform:
+        description: Native platform to run
+        type: choice
+        required: false
+        default: both
+        options: [android, ios, both]
 jobs:
   test:
     name: Node.js ${{ matrix.os }}
@@ -28,14 +46,16 @@ jobs:
       - run: npm run test
       - run: npm run test:engines
   native-compatibility:
-    name: Native compatibility (current)
+    name: Native compatibility (manual opt-in)
+    if: github.event_name == 'workflow_dispatch' && inputs.run_native
     permissions:
       contents: read
-    uses: kmalakoff/react-native-outside/.github/workflows/native.yml@44bd66ef48915a0abf3250072657d2e0a4ef2dab
+    uses: kmalakoff/react-native-outside/.github/workflows/native.yml@5e0e591d6d18419a0020db8cafb50aee4cbf3257
     with:
-      profile: current
+      profile: ${{ inputs.native_profile || 'current' }}
+      platform: ${{ inputs.native_platform || 'both' }}
       candidate_package: react-native-contains
       candidate_repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
       candidate_sha: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
       fixture_repository: kmalakoff/react-native-outside
-      fixture_sha: 44bd66ef48915a0abf3250072657d2e0a4ef2dab
+      fixture_sha: 5e0e591d6d18419a0020db8cafb50aee4cbf3257
