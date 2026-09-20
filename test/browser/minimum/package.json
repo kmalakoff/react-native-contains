@@ -1,0 +1,9 @@
+{
+  "name": "react-native-contains-browser-minimum",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "react": "16.8.0",
+    "react-dom": "16.8.0"
+  }
+}

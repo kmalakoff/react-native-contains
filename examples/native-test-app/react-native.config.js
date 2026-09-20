@@ -6,5 +6,8 @@ module.exports = {
       sourceDir: 'ios',
       automaticPodsInstallation: false,
     },
+    android: {
+      sourceDir: 'android',
+    },
   }),
 };

@@ -1,26 +1,24 @@
 ((typeof global === 'undefined' ? window : global) as unknown as Record<string, unknown>).IS_REACT_ACT_ENVIRONMENT = true;
 
-import '../lib/polyfills.cjs';
-
 import assert from 'assert';
-import React, { act } from 'react';
-import { createRoot, type Root } from 'react-dom/client';
+import React from 'react';
 
 import contains from 'react-native-contains';
+import { act, type MountedRoot, mount, unmount } from '../lib/react-dom.tsx';
 
 const suite = typeof document === 'undefined' ? describe.skip : describe;
 
 suite('react-dom', () => {
   let container: HTMLDivElement | null = null;
-  let root: Root | null = null;
+  let root: MountedRoot | null = null;
   beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
-    root = createRoot(container);
+    root = mount(container);
   });
 
   afterEach(() => {
-    act(() => (root as Root).unmount());
+    unmount(root);
     root = null;
     (container as HTMLDivElement).remove();
     container = null;
@@ -28,7 +26,7 @@ suite('react-dom', () => {
 
   it('self', () => {
     act(() =>
-      (root as Root).render(
+      (root as MountedRoot).render(
         <div>
           <div id="root" />
         </div>
@@ -39,7 +37,7 @@ suite('react-dom', () => {
 
   it('inside', () => {
     act(() =>
-      (root as Root).render(
+      (root as MountedRoot).render(
         <div>
           <div id="root">
             <div id="inside" />
@@ -52,7 +50,7 @@ suite('react-dom', () => {
 
   it('outside', () => {
     act(() =>
-      (root as Root).render(
+      (root as MountedRoot).render(
         <div>
           <div id="root" />
           <div id="outside" />
@@ -94,15 +92,30 @@ suite('react-dom', () => {
     const onChange = (x: boolean) => {
       value = x;
     };
-    act(() => (root as Root).render(<Component onChange={onChange} />));
+    act(() => {
+      (root as MountedRoot).render(<Component onChange={onChange} />);
+    });
     assert.equal(value, undefined);
 
     value = undefined;
-    act(() => ((container as HTMLDivElement).querySelector('#inside') as HTMLElement).click());
+    act(() => {
+      ((container as HTMLDivElement).querySelector('#inside') as HTMLElement).click();
+    });
     assert.equal(value, true);
 
     value = undefined;
-    act(() => ((container as HTMLDivElement).querySelector('#outside') as HTMLElement).click());
+    act(() => {
+      ((container as HTMLDivElement).querySelector('#outside') as HTMLElement).click();
+    });
     assert.equal(value, false);
+  });
+
+  it('contains real text nodes and rejects text from another tree', () => {
+    const inside = document.createTextNode('inside');
+    const outside = document.createTextNode('outside');
+    const host = document.createElement('div');
+    host.appendChild(inside);
+    assert.equal(contains(host, inside), true);
+    assert.equal(contains(host, outside), false);
   });
 });

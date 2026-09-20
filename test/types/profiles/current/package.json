@@ -1,0 +1,9 @@
+{
+  "name": "react-native-contains-types-current",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@types/react": "19.3.0",
+    "typescript": "5.9.3"
+  }
+}

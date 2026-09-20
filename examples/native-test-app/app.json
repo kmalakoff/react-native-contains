@@ -10,7 +10,11 @@
   "ios": {
     "bundleIdentifier": "com.reactnativecontains.smoke"
   },
+  "android": {
+    "package": "com.reactnativecontains.smoke"
+  },
   "resources": {
-    "ios": ["dist/assets", "dist/main.ios.jsbundle"]
+    "ios": ["dist/assets", "dist/main.ios.jsbundle"],
+    "android": ["dist/res", "dist/main.android.jsbundle"]
   }
 }

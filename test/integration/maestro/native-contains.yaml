@@ -2,4 +2,9 @@ appId: com.reactnativecontains.smoke
 ---
 - launchApp:
     clearState: true
-- assertVisible: "CONTAINS_SMOKE_PASS"
+- tapOn:
+    id: "inside-target"
+- assertVisible: "CONTAINS_TOUCH_INSIDE_PASS"
+- tapOn:
+    id: "outside-target"
+- assertVisible: "CONTAINS_TOUCH_OUTSIDE_PASS"

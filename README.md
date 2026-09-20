@@ -11,26 +11,35 @@ npm install react react-native react-native-contains
 ## Use
 
 ```tsx
-import { useRef } from "react";
+import { type ComponentRef, useRef } from "react";
 import { Pressable, View } from "react-native";
 import contains from "react-native-contains";
 
 function Component() {
-  const ref = useRef(null);
+  const ref = useRef<ComponentRef<typeof View>>(null);
   return (
     <View>
       <View ref={ref}>
         <Pressable onPress={(event) => {
-          console.log(contains(ref.current, event.target)); // true
+          const container = ref.current;
+          if (container) console.log(contains(container, event.target)); // true
         }} />
       </View>
       <Pressable onPress={(event) => {
-        console.log(contains(ref.current, event.target)); // false
+        const container = ref.current;
+        if (container) console.log(contains(container, event.target)); // false
       }} />
     </View>
   );
 }
 ```
+
+Modern native host refs are supported through their public `contains()` method. Numeric targets are supported only with the legacy `NativeElement` tag/tree shape; a numeric first argument is not a supported container.
+
+## Testing
+
+See [local tests and manual Android/iOS CI](test/README.md) for the compatibility
+profiles, test commands, and optional GitHub Actions runs.
 
 ## Documentation
 

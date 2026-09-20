@@ -28,4 +28,18 @@ describe('native legacy fallback', () => {
 
     assert.equal(contains(container, outside._nativeTag), false);
   });
+
+  it('handles an empty legacy branch', () => {
+    assert.equal(contains(element(1, []), 2), false);
+  });
+
+  it('checks each branch of a legacy tree', () => {
+    const container = element(1, [element(2), element(3, [element(4)])]);
+
+    assert.equal(contains(container, 4), true);
+  });
+
+  it('returns false when a legacy container receives an unsupported object target', () => {
+    assert.equal(contains(element(1), {} as NativeElement), false);
+  });
 });

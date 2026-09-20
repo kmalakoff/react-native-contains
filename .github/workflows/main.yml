@@ -3,6 +3,28 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      run_native:
+        description: Run the optional native compatibility workflow
+        type: boolean
+        required: false
+        default: false
+      native_profile:
+        description: Native profile; minimum and all include exploratory legacy testing
+        type: choice
+        required: false
+        default: current
+        options: [current, minimum, minimum-android, all]
+      native_platform:
+        description: Native platform to run
+        type: choice
+        required: false
+        default: both
+        options: [android, ios, both]
 jobs:
   test:
     name: Node.js ${{ matrix.os }}
@@ -19,56 +41,27 @@ jobs:
       - run: git config --global user.name "Github Actions"
       - run: git config --global user.email "actions@users.noreply.github.com"
       - run: npm ci
-      - run: npx -y playwright install --with-deps
+      - run: npx -y playwright install --with-deps chromium
+        if: runner.os == 'Linux'
       - run: npm run prepublishOnly
       - run: npm run test
+        if: runner.os == 'Linux'
+      - run: npm run test:types
+        if: runner.os == 'Windows'
+      - run: npx tsds test:node --no-timeouts --exclude test/unit/dom.test.tsx --exclude test/exports/umd-browser.test.ts
+        if: runner.os == 'Windows'
       - run: npm run test:engines
-  ios-native-smoke:
-    name: iOS native smoke
-    runs-on: macos-26
-    timeout-minutes: 60
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 26
-      - run: npm ci
-      - run: npm run build
-      - name: Install fixture dependencies
-        working-directory: examples/native-test-app
-        run: npm ci
-      - name: Validate fixture
-        working-directory: examples/native-test-app
-        run: npm run validate
-      - name: Build iOS bundle
-        working-directory: examples/native-test-app
-        run: npm run build:ios
-      - name: Install iOS dependencies
-        working-directory: examples/native-test-app
-        run: pod install --project-directory=ios
-      - name: Build and install fixture
-        working-directory: examples/native-test-app
-        run: npm run ios -- --no-packager
-      - name: Set up Java for Maestro
-        uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '17'
-      - name: Install Maestro
-        run: |
-          export MAESTRO_VERSION=2.7.0
-          curl -fsSL https://get.maestro.mobile.dev | bash
-      - name: Run Maestro flow
-        env:
-          # Cold CI simulators can take longer than Maestro's two-minute default.
-          MAESTRO_DRIVER_STARTUP_TIMEOUT: '600000'
-        run: |
-          export PATH="$HOME/.maestro/bin:$PATH"
-          maestro test test/integration/maestro/native-contains.yaml
-      - name: Upload Maestro diagnostics
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: maestro-diagnostics
-          path: ~/.maestro/tests
-          include-hidden-files: true
+  native-compatibility:
+    name: Native compatibility (manual opt-in)
+    if: github.event_name == 'workflow_dispatch' && inputs.run_native
+    permissions:
+      contents: read
+    uses: kmalakoff/react-native-outside/.github/workflows/native.yml@cc5f00c573aa3dbcf2a16bd3ffaff492e97e551e
+    with:
+      profile: ${{ inputs.native_profile || 'current' }}
+      platform: ${{ inputs.native_platform || 'both' }}
+      candidate_package: react-native-contains
+      candidate_repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+      candidate_sha: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      fixture_repository: kmalakoff/react-native-outside
+      fixture_sha: cc5f00c573aa3dbcf2a16bd3ffaff492e97e551e

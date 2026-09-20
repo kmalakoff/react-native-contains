@@ -1,9 +1,10 @@
 {
   "extends": "tsds-config/tsconfig.json",
   "compilerOptions": {
+    "strict": true,
     "outDir": "dist",
     "lib": ["es2015", "dom"],
-    "jsx": "react-jsx",
+    "jsx": "react",
     "types": ["mocha", "node"],
     "moduleResolution": "bundler"
   },
