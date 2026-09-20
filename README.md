@@ -36,6 +36,11 @@ function Component() {
 
 Modern native host refs are supported through their public `contains()` method. Numeric targets are supported only with the legacy `NativeElement` tag/tree shape; a numeric first argument is not a supported container.
 
+## Testing
+
+See [local tests and manual Android/iOS CI](test/README.md) for the compatibility
+profiles, test commands, and optional GitHub Actions runs.
+
 ## Documentation
 
 [API Docs](https://kmalakoff.github.io/react-native-contains/)
