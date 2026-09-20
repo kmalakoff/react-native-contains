@@ -56,7 +56,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.run_native
     permissions:
       contents: read
-    uses: kmalakoff/react-native-outside/.github/workflows/native.yml@5e0e591d6d18419a0020db8cafb50aee4cbf3257
+    uses: kmalakoff/react-native-outside/.github/workflows/native.yml@a7ede43960d0a69bd33e508d3cc4d77ef090ccfe
     with:
       profile: ${{ inputs.native_profile || 'current' }}
       platform: ${{ inputs.native_platform || 'both' }}
@@ -64,4 +64,4 @@ jobs:
       candidate_repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
       candidate_sha: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
       fixture_repository: kmalakoff/react-native-outside
-      fixture_sha: 5e0e591d6d18419a0020db8cafb50aee4cbf3257
+      fixture_sha: a7ede43960d0a69bd33e508d3cc4d77ef090ccfe
