@@ -42,8 +42,14 @@ jobs:
       - run: git config --global user.email "actions@users.noreply.github.com"
       - run: npm ci
       - run: npx -y playwright install --with-deps chromium
+        if: runner.os == 'Linux'
       - run: npm run prepublishOnly
       - run: npm run test
+        if: runner.os == 'Linux'
+      - run: npm run test:types
+        if: runner.os == 'Windows'
+      - run: npx tsds test:node --no-timeouts --exclude test/unit/dom.test.tsx --exclude test/exports/umd-browser.test.ts
+        if: runner.os == 'Windows'
       - run: npm run test:engines
   native-compatibility:
     name: Native compatibility (manual opt-in)
