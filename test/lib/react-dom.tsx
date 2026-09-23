@@ -18,7 +18,9 @@ export type MountedRoot = { render: (children: React.ReactNode) => void; unmount
 // Async callbacks require a supporting React version and are outside this matrix.
 export function act(callback: () => void | Promise<void>): void | Promise<void> {
   const reactAct = (React as typeof React & { act?: (callback: () => void | Promise<void>) => unknown }).act;
-  const actImplementation = reactAct ?? ReactDOMTestUtils.act;
+  // jspm's React 16.8 test-utils build exposes act on its default export only.
+  const testUtils = (ReactDOMTestUtils as typeof ReactDOMTestUtils & { default?: typeof ReactDOMTestUtils }).default ?? ReactDOMTestUtils;
+  const actImplementation = reactAct ?? testUtils.act;
   return actImplementation(callback) as void | Promise<void>;
 }
 
