@@ -1,2 +1,3 @@
-process.env.REACT_TEST_PROFILE = 'react18';
-export default (await import('./wtr.config.mjs')).default;
+import { profileConfig } from './wtr.config.mjs';
+
+export default profileConfig('react18');

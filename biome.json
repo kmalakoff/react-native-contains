@@ -4,6 +4,6 @@
     "jsxRuntime": "reactClassic"
   },
   "files": {
-    "includes": ["!dist", "!node_modules", "!.git", "!docs", "!examples", "!assets", "!.tmp", "!.vscode", "!test/data"]
+    "includes": ["!dist", "!node_modules", "!.git", "!.agents", "!.archive", "!.worktrees", "!docs", "!examples", "!assets", "!.tmp", "!.vscode", "!test/data"]
   }
 }

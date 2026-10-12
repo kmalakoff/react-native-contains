@@ -41,16 +41,37 @@ jobs:
       - run: git config --global user.name "Github Actions"
       - run: git config --global user.email "actions@users.noreply.github.com"
       - run: npm ci
-      - run: npx -y playwright install --with-deps chromium
+      - name: Install browsers
+        run: node node_modules/playwright/cli.js install --with-deps chromium firefox webkit
         if: runner.os == 'Linux'
+      - name: Install browsers
+        run: node node_modules/playwright/cli.js install chromium firefox webkit
+        if: runner.os == 'Windows'
       - run: npm run prepublishOnly
       - run: npm run test
-        if: runner.os == 'Linux'
-      - run: npm run test:types
-        if: runner.os == 'Windows'
-      - run: npx tsds test:node --no-timeouts --exclude test/unit/dom.test.tsx --exclude test/exports/umd-browser.test.ts
-        if: runner.os == 'Windows'
       - run: npm run test:engines
+  browser-macos:
+    name: Browser macOS
+    runs-on: macos-26
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 26
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Install browsers
+        run: node node_modules/playwright/cli.js install chromium firefox webkit
+      - name: Tests
+        run: npm run test:browser
   native-compatibility:
     name: Native compatibility (manual opt-in)
     if: github.event_name == 'workflow_dispatch' && inputs.run_native

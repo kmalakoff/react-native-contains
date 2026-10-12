@@ -1,2 +1,3 @@
-process.env.REACT_TEST_PROFILE = 'minimum';
-export default (await import('./wtr.config.mjs')).default;
+import { profileConfig } from './wtr.config.mjs';
+
+export default profileConfig('minimum');
