@@ -1,0 +1,36 @@
+name: Native compatibility
+on:
+  workflow_dispatch:
+    inputs:
+      run_native:
+        description: Run the optional native compatibility workflow
+        type: boolean
+        required: false
+        default: false
+      native_profile:
+        description: Native profile; minimum and all include exploratory legacy testing
+        type: choice
+        required: false
+        default: current
+        options: [current, minimum, minimum-android, all]
+      native_platform:
+        description: Native platform to run
+        type: choice
+        required: false
+        default: both
+        options: [android, ios, both]
+jobs:
+  native-compatibility:
+    name: Native compatibility (manual opt-in)
+    if: github.event_name == 'workflow_dispatch' && inputs.run_native
+    permissions:
+      contents: read
+    uses: kmalakoff/react-native-outside/.github/workflows/native.yml@cc5f00c573aa3dbcf2a16bd3ffaff492e97e551e
+    with:
+      profile: ${{ inputs.native_profile || 'current' }}
+      platform: ${{ inputs.native_platform || 'both' }}
+      candidate_package: react-native-contains
+      candidate_repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+      candidate_sha: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      fixture_repository: kmalakoff/react-native-outside
+      fixture_sha: cc5f00c573aa3dbcf2a16bd3ffaff492e97e551e
