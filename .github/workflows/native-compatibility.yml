@@ -25,7 +25,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.run_native
     permissions:
       contents: read
-    uses: kmalakoff/react-native-outside/.github/workflows/native.yml@cc5f00c573aa3dbcf2a16bd3ffaff492e97e551e
+    uses: kmalakoff/react-native-outside/.github/workflows/native.yml@490447a0a7b4a397aeca52859f0e9faf8fa28a77
     with:
       profile: ${{ inputs.native_profile || 'current' }}
       platform: ${{ inputs.native_platform || 'both' }}
